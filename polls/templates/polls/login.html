@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="cn">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+</head>
+<body>
+    <h1>Welcome</h1>
+    {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif%}
+    <form action="{% url 'polls:index'  %}" method="post">
+        {% csrf_token %}
+        <div>
+            <span>用户名: </span>
+            <input type="text" name="uname">
+        </div>
+        <div>
+            <span>密码: </span>
+            <input type="password" name="upassword">
+        </div>
+        <input type="submit" value="Login">
+    </form>
+</body>
+</html>

@@ -1,0 +1,48 @@
+# coding:utf-8
+# 如使用mysql,则应安装:
+pip install mysqlclient
+
+# 默认开启的某些应用需要至少一个数据表，所以，在使用他们之前需要在数据库中创建一些表。请执行以下命令：
+python3 manage.py migrate
+
+# 为了在我们的工程中包含这个应用，我们需要在配置类 INSTALLED_APPS 中添加设置。
+# 因为 PollsConfig 类写在文件 polls/apps.py 中，所以它的点式路径是 'polls.apps.PollsConfig'
+
+#激活模型
+python3 manage.py makemigrations polls
+
+#创建管理员账号
+python3 manage.py createsuperuser
+
+#启动开发服务器
+python3 manage.py runserver
+
+#render()载入模板，填充上下文，再返回由它生成的 HttpResponse 对象
+#The render() function takes the request object as its first argument,
+#a template name as its second argument and a dictionary as its optional third argument.
+#It returns an HttpResponse object of the given template rendered with the given context.
+render(request, 'polls/index.html', context)
+
+#get()用于只有一个结果的查询, pk:pramary key
+#如果查无结果,会raise Question.DoesNotExist
+Question.objects.get(pk=1)
+
+#用get()查找对象,找不到则抛404
+get_object_or_404(Question, pk=question_id)
+
+#用filter()查找对象,空集抛404
+get_list_or_404()
+
+#因为你在 polls.urls 的 url() 函数中通过 name 参数为 URL 定义了名字，你可以使用 {% url %} 标签代替它：
+<li><a href="{% url 'detail' question.id %}">{{ question.question_text }}</a></li>
+
+#forloop.counter 指示 {% for %} 标签已经循环多少次
+
+#POST方法防止跨站点伪造请求
+{% csrf_token %}
+
+#根据数量变成复数
+{{ choice.votes|pluralize }}
+
+#???DetailView 期望从 URL 中捕获名为 "pk" 的主键值，所以我们为通用视图把 question_id 改成 pk
+# pk  slug
