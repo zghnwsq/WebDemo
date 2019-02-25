@@ -5,15 +5,21 @@ from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect
 from .models import Question, Choice
 from django.urls import reverse
-from django.views import generic, View
+from django.views import generic
 from django.utils import timezone
-from django.contrib.auth import authenticate, login
-from django.contrib.auth.models import User
+from django.contrib.auth import authenticate,login
+from django.contrib.auth.views import LoginView, LogoutView
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth import logout
+# from django.contrib.auth.models import User
 # from django.http import Http404
 #from django.template import loader
 
 
-class IndexView(generic.ListView):
+class IndexView(LoginRequiredMixin, generic.ListView):
+    # login_url = 'login/'
+    # redirect_field_name
     template_name = 'polls/index.html'
     context_object_name = 'latest_question_list'  # 指定传入模板的context的名字
 
@@ -24,46 +30,44 @@ class IndexView(generic.ListView):
         - that is, earlier than or equal to - timezone.now."""
         return Question.objects.filter(pub_date__lte=timezone.now()).order_by('-pub_date')[:5]
 
-    def post(self, request, *args, **kwargs):
-        try:
-            uname = request.POST['uname']
-            upassword = request.POST['upassword']
-        except KeyError:
-            return render(request, 'polls/login.html', {'error_message': "Empty Input !", })
-        user = authenticate(request, uname=uname, upassword=upassword)
-        if user is None:
-            return render(request, 'polls/login.html', {'error_message': "Premission Denined !", })
 
-
-class DetailView(generic.DetailView):
+class DetailView(LoginRequiredMixin, generic.DetailView):
     model = Question  # 使用了模型, question自动提供给模板
     template_name = 'polls/detail.html'
 
 
-class ResultsView(generic.DetailView):
+class ResultsView(LoginRequiredMixin, generic.DetailView):
     model = Question  # 使用了模型, question自动提供给模板
     template_name = 'polls/results.html'
 
 
-class LoginView(View):
+class LoginView(LoginView):
     # template_name = 'polls/login.html'
 
     def get(self, request):
-        return render(request, 'polls/login.html')
+        redirect = request.GET.get('next','')
+        return render(request, 'polls/login.html', {'next': redirect})
 
-# def login(request):
-#     uname = request.POST['uname']
-#     upassword = request.POST['upassword']
-#     user = authenticate(request, uname=uname, upassword=upassword)
-#     if user is not None:
-#         login(request, user)
-#         return HttpResponseRedirect(reverse('polls:index'))
-#     else:
-#         return render(request, 'polls/login.html', {
-#             'error_message': "You didn't select a choice.",
-#         })
+    def post(self, request, *args, **kwargs):
+        try:
+            uname = request.POST['uname']
+            upassword = request.POST['upassword']
+            redirect = request.POST.get('next','')
+        except KeyError:
+            return render(request, 'polls/login.html', {'error_message': "Empty Input !", })
+        user = authenticate(request, username=uname, password=upassword)
+        # user = authenticate(request, uname='ted', upassword='000')
+        if user is not None:
+            login(request, user)
+            if redirect:
+                return HttpResponseRedirect(redirect)  # 转到登陆前页面
+            else:
+                return HttpResponseRedirect(reverse('polls:index'))
+        else:
+            return render(request, 'polls/login.html', {'error_message': "Premission Denined !", })
 
 
+@login_required
 def vote(request, question_id):
     question = get_object_or_404(Question, pk=question_id)
     try:
@@ -83,6 +87,11 @@ def vote(request, question_id):
         # reverse() 调用将返回一个这样的字符串：'/polls/question.id/results/'
         return HttpResponseRedirect(reverse('polls:results', args=(question.id,)))
 
+
+@login_required
+def logout_view(request):
+    logout(request)
+    return HttpResponseRedirect(reverse('polls:login'))
 
 # def index(request):
 #     latest_question_list = Question.objects.order_by('pub_date')[:5]

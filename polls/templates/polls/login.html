@@ -3,21 +3,39 @@
 <head>
     <meta charset="UTF-8">
     <title>Login</title>
+    <style type="text/css">
+        #login {background: #0077c9;
+                height: 30%; width:30%; margin: auto;
+                position: absolute;
+                top: 0; left: 0; bottom: 0; right: 0;}
+        h1, form{text-align: center;}
+        div {margin:0 auto}
+        table {margin:0 auto; text-align: center;}
+    </style>
 </head>
 <body>
-    <h1>Welcome</h1>
-    {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif%}
-    <form action="{% url 'polls:index'  %}" method="post">
-        {% csrf_token %}
-        <div>
-            <span>用户名: </span>
-            <input type="text" name="uname">
-        </div>
-        <div>
-            <span>密码: </span>
-            <input type="password" name="upassword">
-        </div>
-        <input type="submit" value="Login">
-    </form>
+    <div id="login">
+        <h1>Welcome</h1>
+        {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif%}
+        <form action="{% url 'polls:login'  %}" method="post">
+            {% csrf_token %}
+            <div>
+                <table>
+                <tr>
+                    <td>用户名: </td>
+                    <td><input type="text" name="uname"></td>
+                </tr>
+                <tr>
+                    <td>密码: </td>
+                    <td><input type="password" name="upassword"></td>
+                </tr>
+                <tr>
+                    <td><input type="hidden" name="next"  value="{{next}}"></td>
+                    <td><input type="submit" value="登录"></td>
+                </tr>
+                </table>
+            </div>
+        </form>
+    </div>
 </body>
 </html>
