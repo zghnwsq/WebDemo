@@ -1,5 +1,15 @@
 {% extends 'base.html' %}
 
+{% block left %}
+<div id="menu">
+    <div class="buttom">
+        {% for m in menu %}
+        <div><a href="">{{m.menu_text}}</a></div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
+
 {% block content %}
 <div>
     <h1>{{ question.question_text }}</h1>

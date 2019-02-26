@@ -42,9 +42,9 @@ class IndexView(LoginRequiredMixin, generic.ListView):
         rmenu = RoleMenu.objects.filter(role_name=user_group).values('menu')
         menu = Menu.objects.filter(menu_text__in=rmenu).order_by('order')
         context = {'latest_question_list': latest_question_list,
-                   'menu':menu,
-                   'user_group':user_group,
-                   'user_name':user_name}
+                   'menu': menu,
+                   'user_group': user_group,
+                   'user_name': user_name}
         return render(request, 'polls/index.html', context)
 
 
@@ -53,10 +53,37 @@ class DetailView(LoginRequiredMixin, generic.DetailView):
     model = Question  # 使用了模型, question自动提供给模板
     template_name = 'polls/detail.html'
 
+    def get_context_data(self, **kwargs):
+        # Call the base implementation first to get a context
+        context = super().get_context_data(**kwargs)
+        request = self.request
+        user_name = request.user.username
+        user_group = Group.objects.get(user__username=user_name)
+        rmenu = RoleMenu.objects.filter(role_name=user_group).values('menu')
+        menu = Menu.objects.filter(menu_text__in=rmenu).order_by('order')
+        context['menu'] = menu
+        context['user_group'] = user_group
+        context['user_name'] = user_name
+        return context
+
+
 
 class ResultsView(LoginRequiredMixin, generic.DetailView):
     model = Question  # 使用了模型, question自动提供给模板
     template_name = 'polls/results.html'
+
+    def get_context_data(self, **kwargs):
+        # Call the base implementation first to get a context
+        context = super().get_context_data(**kwargs)
+        request = self.request
+        user_name = request.user.username
+        user_group = Group.objects.get(user__username=user_name)
+        rmenu = RoleMenu.objects.filter(role_name=user_group).values('menu')
+        menu = Menu.objects.filter(menu_text__in=rmenu).order_by('order')
+        context['menu'] = menu
+        context['user_group'] = user_group
+        context['user_name'] = user_name
+        return context
 
 
 # class LoginView(LoginView):
