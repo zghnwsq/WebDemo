@@ -46,3 +46,7 @@ get_list_or_404()
 
 #???DetailView 期望从 URL 中捕获名为 "pk" 的主键值，所以我们为通用视图把 question_id 改成 pk
 # pk  slug
+
+#取用户名
+{{user.username}}
+            <!--<td>{{user.username}}</td>-->
