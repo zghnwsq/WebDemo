@@ -2,7 +2,7 @@ body {font-family: Microsoft Yahei}
 div#head {height: 70px; width: 100%; background: #0077c9}
 div#head table{height: 100%; float:right}
 div#head div{height: 100%; color: #eeeeee; float:left; padding-left:5%}
-table td {padding: 10px;text-align: center; vertical-align: middle; color:white}
+div#head table td {padding: 10px;text-align: center; vertical-align: middle; color:white}
 div#left {height: 1024px; width: 15%; float: left; background: #368bde}
 div#content {height: 1024px; width: 85%; float: right;}
 #menu {margin:0 auto; text-align: center; }
@@ -13,4 +13,26 @@ div#content {height: 1024px; width: 85%; float: right;}
             padding:10px 15px}
 li a {
     color: green;
+}
+
+.even {
+    background: #e6e5e5;
+}
+
+table#projects {
+    width:100%;
+}
+
+table#projects th td {
+    border: 1px ;
+}
+
+table#projects th {
+    padding: 3px;
+    background: #dad8d8;
+}
+table#projects td {
+    padding: 3px;
+    text-align: center;
+    color:#000000;
 }

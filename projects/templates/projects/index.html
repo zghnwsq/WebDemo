@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block left %}
+<div id="menu">
+    <div class="buttom">
+        {% for m in menu %}
+        <div><a href="">{{m.menu_text}}</a></div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
+
+{% block content %}
+    <div>
+        <h3>Projects List</h3>
+{% if project_list %}
+    <table id="projects">
+        <thead>
+            <tr>
+                <th>项目名称</th>
+                <th>状态</th>
+                <th>创建人</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for project in project_list %}
+                {% if forloop.counter|divisibleby:"2" %}
+                    <tr class="even">
+                        <td>{{project.project}}</td>
+                        <td>{{project.status}}</td>
+                        <td>{{project.charge}}</td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td>{{project.project}}</td>
+                        <td>{{project.status}}</td>
+                        <td>{{project.charge}}</td>
+                    </tr>
+                {% endif %}
+            {% endfor %}
+        </tbody>
+    </table>
+{% else %}
+    <p>No Project avaliable</p>
+{% endif %}
+    </div>
+{% endblock %}
+

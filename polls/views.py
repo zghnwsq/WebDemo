@@ -48,7 +48,6 @@ class IndexView(LoginRequiredMixin, generic.ListView):
         return render(request, 'polls/index.html', context)
 
 
-
 class DetailView(LoginRequiredMixin, generic.DetailView):
     model = Question  # 使用了模型, question自动提供给模板
     template_name = 'polls/detail.html'
@@ -65,7 +64,6 @@ class DetailView(LoginRequiredMixin, generic.DetailView):
         context['user_group'] = user_group
         context['user_name'] = user_name
         return context
-
 
 
 class ResultsView(LoginRequiredMixin, generic.DetailView):

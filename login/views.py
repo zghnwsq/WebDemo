@@ -25,6 +25,7 @@ class LoginView(LoginView):
             if redirect:
                 return HttpResponseRedirect(redirect)  # 转到登陆前页面
             else:
-                return HttpResponseRedirect(reverse('polls:index'))
+                return HttpResponseRedirect(reverse('projects:index'))
         else:
             return render(request, 'login/login.html', {'error_message': "Premission Denined !", })
+
