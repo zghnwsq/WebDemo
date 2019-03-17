@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+<!--{% block left %}-->
+<!--<div id="menu">-->
+    <!--<div class="buttom">-->
+        <!--{% for m in menu %}-->
+        <!--<div><a href="">{{m.menu_text}}</a></div>-->
+        <!--{% endfor %}-->
+    <!--</div>-->
+<!--</div>-->
+<!--{% endblock %}-->
+{% load static %}
+{% block statics %}
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script type="text/javascript" src="{% static 'modify.js' %}"></script>
+{% endblock %}
+
+{% block content %}
+{% if message %}<p id="message" style="padding-left: 50%">{{message}}</p>{% endif %}
+{% if projects %}
+    <form action="{% url 'projects:modify' projects.id %}" method="post">
+        {% csrf_token %}
+        <table id="projects">
+            <thead>
+                <tr>
+                    <th>项目名称</th>
+                    <th>状态</th>
+                    <th>创建人</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                        <tr>
+                            <td><input type="text" name="project" value="{{projects.project}}"></td>
+                            <td><input type="text" name="status" value="{{projects.status}}"></td>
+                            <td>{{projects.charge}}</td>
+                            <td>
+                                <input type="hidden" name="project_id" value="{{projects.id}}">
+                                <div><input type="submit" value="提交"></div>
+                            </td>
+                        </tr>
+            </tbody>
+        </table>
+{% else %}
+        <p>No Project avaliable</p>
+    </form>
+{% endif %}
+        <div class="buttom" style="float: right;
+            margin: 2% 5% 1% 1%;
+            padding: 3px;
+            border:1px solid #c7c7c7;
+            border-radius: 2px;
+            color: white;">
+            <a href="{% url 'projects:index' %}">返回</a>
+        </div>
+    </div>
+{% endblock %}

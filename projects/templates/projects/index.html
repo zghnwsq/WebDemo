@@ -1,18 +1,19 @@
 {% extends "base.html" %}
 
-{% block left %}
-<div id="menu">
-    <div class="buttom">
-        {% for m in menu %}
-        <div><a href="">{{m.menu_text}}</a></div>
-        {% endfor %}
-    </div>
-</div>
-{% endblock %}
+<!--{% block left %}-->
+<!--<div id="menu">-->
+    <!--<div class="buttom">-->
+        <!--{% for m in menu %}-->
+        <!--<div><a href="">{{m.menu_text}}</a></div>-->
+        <!--{% endfor %}-->
+    <!--</div>-->
+<!--</div>-->
+<!--{% endblock %}-->
 
 {% block content %}
     <div>
-        <h3>Projects List</h3>
+        {% if message %}<p>{{message}}</p>{% endif %}
+        <h3 class="projects">项 目 列 表</h3>
 {% if project_list %}
     <table id="projects">
         <thead>
@@ -20,23 +21,23 @@
                 <th>项目名称</th>
                 <th>状态</th>
                 <th>创建人</th>
+                <th>操作</th>
             </tr>
         </thead>
         <tbody>
             {% for project in project_list %}
                 {% if forloop.counter|divisibleby:"2" %}
                     <tr class="even">
-                        <td>{{project.project}}</td>
-                        <td>{{project.status}}</td>
-                        <td>{{project.charge}}</td>
-                    </tr>
                 {% else %}
                     <tr>
+                {% endif %}
                         <td>{{project.project}}</td>
                         <td>{{project.status}}</td>
                         <td>{{project.charge}}</td>
+                        <td>
+                            <div class="buttom"><a href="{% url 'projects:modify' project.id %}">修改</a></div>
+                        </td>
                     </tr>
-                {% endif %}
             {% endfor %}
         </tbody>
     </table>
