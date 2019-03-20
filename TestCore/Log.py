@@ -40,7 +40,7 @@ class Log:
         # 第五步，将logger添加到handler里面
         self.logger.addHandler(self.handler)
 
-    def write(self, msg, level):
+    def write(self, level, msg):
         # 写入日志
         if level == "debug":
             self.logger.debug(msg)

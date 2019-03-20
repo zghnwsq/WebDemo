@@ -75,16 +75,16 @@ get_list_or_404()
 
 
 #测试框架设计
-日志类
-读写excel
-读写txt
-http接口类
+日志类 ok
+读写excel ok
+读写txt half
+http接口类 ok
 接口关键字类
 web element类
 web关键字类
 报告
 邮件
-全局参数类
+全局参数类 ok
 testcase类
 testsuit类
 runner类(多线程)
