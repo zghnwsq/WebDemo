@@ -89,7 +89,17 @@ testcase类
 testsuit类
 runner类(多线程)
 
-suit[module, case, initRow, endRow, initTime, endTime, result]
+suit[suit, case, initRow, endRow, initTime, endTime, result]
 
-case[Module, TestCase, Action, P1, P2, P3, Result, Detail]
+case[Suit, TestCase, Action, P1, P2, P3, Result, Detail]
+
+有	有	如果是第一行	存储suit名，case名，initRow=当前 endRow=当前
+		如果不是第一行	存储上一个用例，存储新的suit名，case名，initRow=当前 endRow=当前
+		    如果是最后一行	 存储用例
+	有	存储上一个用例后
+	    如果不是最后一行	存储新的case名，initRow=当前 endRow=当前
+		如果是最后一行	    存储case名，initRow=当前 endRow=当前，存储用例
+无	无	如果不是最后一行	endRow=当前
+		如果是最后一行  	endRow=当前，存储用例
+
 

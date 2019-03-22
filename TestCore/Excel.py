@@ -33,14 +33,17 @@ class Excel:
     def read_sheets(path):
         """
         读取整个excel
+        2019.3.22: 为配合excel写入的方法，改为以sheet_index为key存储
         :param path: excel路径
-        :return: 返回一个以sheet_name为key的字典
+        :return: 返回一个以sheet_index(x sheet_name x)为key的字典
         """
         try:
             excel = xlrd.open_workbook(path)
-            sheets = excel.sheets()
+            # sheets = excel.sheets()
             sheet = {}
-            for sht in sheets:
+            # for sht in sheets:
+            for no in range(excel.nsheets):
+                sht = excel.sheet_by_index(no)
                 row = []
                 for i in range(sht.nrows):
                     r = sht.row_values(i)
@@ -48,7 +51,8 @@ class Excel:
                     for j in range(sht.ncols):
                         rr.append(r[j])
                     row.append(rr)
-                sheet[sht.name] = row
+                # sheet[sht.name] = row
+                sheet[no] = row
             return sheet
         except Exception as e:
             print(e)
