@@ -79,7 +79,7 @@ get_list_or_404()
 读写excel ok
 读写txt half
 http接口类 ok
-接口关键字类
+接口关键字类 ok
 web element类
 web关键字类
 报告
@@ -88,3 +88,8 @@ web关键字类
 testcase类
 testsuit类
 runner类(多线程)
+
+suit[module, case, initRow, endRow, initTime, endTime, result]
+
+case[Module, TestCase, Action, P1, P2, P3, Result, Detail]
+

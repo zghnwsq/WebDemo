@@ -11,7 +11,7 @@ header = {'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/53
 http = Http()
 res = http.get(url, headers=header)
 print(res)
-print(http.get_response_headers())
+print(dict(http.get_response_headers())['Content-Type'])
 print(http.get_response_text())
 print(http.get_res_by_json_path('$.result.temperature'))
 

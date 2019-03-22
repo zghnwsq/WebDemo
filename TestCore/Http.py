@@ -123,7 +123,7 @@ class Http:
             self.session.headers = self.headers
         if cookie is not None:
             self.set_cookie(cookie)
-        self.session.cookies = self.cookie
+            self.session.cookies = self.cookie
         self.response = self.session.get(self.url)
         return self.response
 
