@@ -7,6 +7,7 @@
     {% endcomment %}
     {% load static %}
     <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}">
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
     {% block statics %}{% endblock %}
     <style type="text/css">
     </style>
@@ -24,11 +25,11 @@
     </table>
 </div>
 <div id="left">
-    <!--{% block left %}{% endblock %}-->
+    <!--block left-->
     <div id="menu">
-    <div class="buttom">
+    <div class="button">
         {% for m in menu %}
-        <div><a href="">{{m.menu_text}}</a></div>
+        <div><a href="{{m.url}}">{{m.menu_text}}</a></div>
         {% endfor %}
     </div>
 </div>

@@ -13,6 +13,13 @@ div#content {height: 1024px; width: 85%; float: right;}
             margin:10px;
             padding:10px 15px}
 
+div.content_btn {
+            margin: 1% 1% 1% 1%;
+            padding: 3px;
+            border:1px solid #c7c7c7;
+            border-radius: 2px;
+}
+
 li a {
     color: green;
 }
@@ -25,7 +32,7 @@ li a {
     padding-left: 1%;
 }
 
-table#projects .buttom{
+table#list .button{
     margin: auto;
     width: 60px;
     border:1px solid #c7c7c7;
@@ -33,20 +40,20 @@ table#projects .buttom{
     color: white;
 }
 
-table#projects {
+table#list {
     margin: auto;
     width:98%;
 }
 
-table#projects th td {
+table#list th td {
     border: 1px ;
 }
 
-table#projects th {
+table#list th {
     padding: 3px;
     background: #dad8d8;
 }
-table#projects td {
+table#list td {
     padding: 3px;
     text-align: center;
     color:#000000;

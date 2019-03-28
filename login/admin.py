@@ -5,7 +5,7 @@ from .models import Menu, RoleMenu
 
 
 class MenuAdmin(admin.ModelAdmin):
-    list_display = ('order', 'menu_text')
+    list_display = ('order', 'menu_text', 'url')
 
 
 class RoleMenuAdmin(admin.ModelAdmin):

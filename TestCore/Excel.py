@@ -1,6 +1,6 @@
 # coding:utf8
 
-import xlwt, xlrd
+import xlrd
 from xlutils.copy import copy
 
 
@@ -27,7 +27,6 @@ class Excel:
         except Exception as e:
             print(e)
             return None
-
 
     @staticmethod
     def read_sheets(path):

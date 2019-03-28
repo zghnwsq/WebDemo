@@ -1,28 +1,66 @@
 {% extends "base.html" %}
-{% block static %}
+
+{% load static %}
+{% block statics %}
+<style type="text/css">
+    div.search{
+        padding-left: 10px;
+        padding-top: 10px;
+        width: 90%;
+    }
+    tr.search td {
+        padding: 3px;
+    }
+</style>
 <script type="text/javascript">
     $(document).ready(function(){
         $("#do_search").click(function(){
                 $("#search_form").submit();
             });
-        )
     });
 </script>
 {% endblock %}
 
 {% block content %}
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif%}
 <div class="search">
     <form id="search_form" action="{% url 'testcase:search' %}" method="post">
+        {% csrf_token %}
         <!--input name="project" type="text" placeholder="项目名称"-->
         <!--改用select-->
-        <div id="do_search"  class="button">查询</div>
+        <div >
+            <table style="width: 100%;">
+                <tbody>
+                    <tr class="search">
+                        <td >
+                            <select id="project_list" name="project" style="height: 30px; width: 80%;">
+                                {% if project_list %}
+                                    {% for project in project_list %}
+                                    {% if selected_id %}
+                                        {% if  project.id|stringformat:"s" == selected_id|stringformat:"s" %}
+                                            <option value="{{project.id}}" selected="selected">{{project.project}}</option>
+                                        {% else %}
+                                            <option value="{{project.id}}">{{project.project}}</option>
+                                        {% endif %}
+                                    {% else %}
+                                        <option value="{{project.id}}">{{project.project}}</option>
+                                    {% endif %}
+                                    {% endfor %}
+                                {% endif %}
+                            </select>
+                        </td>
+                        <td><div id="do_search" style="width: 40px; height: 22px; text-align: center;" class="content_btn">查询</div></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
     </form>
 </div>
 <div class="case_list">
     <h3 class="projects">用 例 列 表</h3>
     {% if message %}<p>{{message}}</p>{% endif %}
-    {% if case_list %}
-        <table id="case_list">
+        <table id="list">
             <thead>
                 <tr>
                     <th>用例编号</th>
@@ -31,6 +69,7 @@
                     <th>操作</th>
                 </tr>
             </thead>
+    {% if case_list %}
             <tbody>
                 {% for case in case_list %}
                     {% if forloop.counter|divisibleby:"2" %}
@@ -39,7 +78,7 @@
                     <tr>
                     {% endif %}
                     <td>{{case.no}}</td>
-                    <td>{{case.name}}</td>
+                    <td>{{case.case}}</td>
                     <td>{{case.charge}}</td>
                     <td></td>
                     </tr>
