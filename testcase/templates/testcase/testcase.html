@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block static %}
+<script type="text/javascript">
+    $(document).ready(function(){
+        $("#do_search").click(function(){
+                $("#search_form").submit();
+            });
+        )
+    });
+</script>
+{% endblock %}
+
+{% block content %}
+<div class="search">
+    <form id="search_form" action="{% url 'testcase:search' %}" method="post">
+        <!--input name="project" type="text" placeholder="项目名称"-->
+        <!--改用select-->
+        <div id="do_search"  class="button">查询</div>
+    </form>
+</div>
+<div class="case_list">
+    <h3 class="projects">用 例 列 表</h3>
+    {% if message %}<p>{{message}}</p>{% endif %}
+    {% if case_list %}
+        <table id="case_list">
+            <thead>
+                <tr>
+                    <th>用例编号</th>
+                    <th>用例名称</th>
+                    <th>创建人</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for case in case_list %}
+                    {% if forloop.counter|divisibleby:"2" %}
+                    <tr class="even">
+                    {% else %}
+                    <tr>
+                    {% endif %}
+                    <td>{{case.no}}</td>
+                    <td>{{case.name}}</td>
+                    <td>{{case.charge}}</td>
+                    <td></td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+</div>
+
+{% endblock %}

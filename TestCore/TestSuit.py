@@ -39,7 +39,6 @@ class TestSuit:
                 self.excel_suits[i] = suit
         return self.excel_suits
 
-
     @staticmethod
     def __get_suit_from_sheet(sheet):
         """
@@ -61,7 +60,7 @@ class TestSuit:
                     raise Exception(u'用例首行测试用例名称不能为空!')
             # suit有 case有
             if row[0] and row[1]:
-                #如果是步骤第一行
+                # 如果是步骤第一行
                 if i == 1:
                     current_suit = row[0]
                     current_case = row[1]

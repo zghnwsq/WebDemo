@@ -7,7 +7,7 @@ div#left {height: 1024px; width: 15%; float: left; background: #368bde}
 div#content {height: 1024px; width: 85%; float: right;}
 #menu {margin:0 auto; text-align: center; }
 
-.buttom div{background: #2e76bd;
+.button div{background: #2e76bd;
             color:#c4ceda;
             border-radius:3px;
             margin:10px;

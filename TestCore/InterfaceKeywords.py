@@ -1,6 +1,6 @@
 # coding:utf8
 
-from . import Http
+from TestCore.Http import Http
 import json
 import lxml.etree as etree
 
@@ -18,11 +18,12 @@ class InterfaceKeywords:
         self.http = None
         self.var_map = var_map
 
-    def http_set(self):
+    def http_set(self, params):
         """
         实例化Http
         :return: True
         """
+        self.log.write('debug', params)
         self.http = Http()
         self.log.write('info', 'New Http Object Set')
         return True
@@ -43,7 +44,7 @@ class InterfaceKeywords:
             return True
         except Exception as e:
             self.res = ''
-            self.log.write('error', 'Try to Get: ' + url + '|---Fail!')
+            self.log.write('error', 'Try to Get: |' + url + '|---Fail!')
             self.log.write('error', e.__str__())
             return False
 
@@ -63,7 +64,7 @@ class InterfaceKeywords:
             return True
         except Exception as e:
             self.res = ''
-            self.log.write('error', 'Try to POST: ' + url + '|---Fail!')
+            self.log.write('error', 'Try to POST: |' + url + '|---Fail!')
             self.log.write('error', e.__str__())
             return False
 
@@ -80,10 +81,10 @@ class InterfaceKeywords:
             else:
                 hds = json.loads(params[0])
                 self.http.add_headers(hds)
-            self.log.write('info', 'Try to add headers: ' + params[0] + params[1] + '|---Success')
+            self.log.write('info', 'Try to add headers: |' + params[0] + ' ' + params[1] + '|---Success')
             return True
         except Exception as e:
-            self.log.write('error', 'Try to add headers: ' + params[0] + params[1] + '|---Fail!')
+            self.log.write('error', 'Try to add headers: |' + params[0] + ' ' + params[1] + '|---Fail!')
             self.log.write('error', e.__str__())
             return False
 
@@ -96,10 +97,10 @@ class InterfaceKeywords:
         try:
             if params[0].strip() != '':
                 self.http.remove_headers(params[0])
-            self.log.write('info', 'Try to remove headers: ' + params[0] + '|---Success!')
+            self.log.write('info', 'Try to remove headers: |' + params[0] + '|---Success!')
             return True
         except Exception as e:
-            self.log.write('error', 'Try to remove headers: ' + params[0] + '|---Fail!')
+            self.log.write('error', 'Try to remove headers: |' + params[0] + '|---Fail!')
             self.log.write('error', e.__str__())
             return False
 
@@ -112,10 +113,10 @@ class InterfaceKeywords:
         try:
             if params[0].strip() != '':
                 self.http.set_body(params[0])
-            self.log.write('info', 'Try to set body: ' + params[0] + '|---Success!')
+            self.log.write('info', 'Try to set body: |' + params[0] + '|---Success!')
             return True
         except Exception as e:
-            self.log.write('error', 'Try to set body: ' + params[0] + '|---Fail!')
+            self.log.write('error', 'Try to set body: |' + params[0] + '|---Fail!')
             self.log.write('error', e.__str__())
             return False
 
@@ -128,10 +129,10 @@ class InterfaceKeywords:
         try:
             if params[0].strip() != '':
                 self.http.set_body(params[0])
-            self.log.write('info', 'Try to set body: ' + params[0] + '|---Success!')
+            self.log.write('info', 'Try to set body: |' + params[0] + '|---Success!')
             return True
         except Exception as e:
-            self.log.write('error', 'Try to set body: ' + params[0] + '|---Fail!')
+            self.log.write('error', 'Try to set body: |' + params[0] + '|---Fail!')
             self.log.write('error', e.__str__())
             return False
 
@@ -142,12 +143,12 @@ class InterfaceKeywords:
         :return: 布尔值结果
         """
         try:
-            value = self.http.get_res_by_json_path(params[0])
-            self.var_map[params[1]] = value
-            self.log.write('info', 'Try to get value: ' + params[0] + ':' + value + '|---Success!')
+            value = self.http.get_res_by_json_path(params[0])[0]
+            self.var_map.set_var(params[1], value)
+            self.log.write('info', 'Try to get value: |' + params[0] + ':' + value + '|---Success!')
             return True
         except Exception as e:
-            self.log.write('error', 'Try to get value: ' + params[0] + ':' + value + '|---Fail!')
+            self.log.write('error', 'Try to get value: |' + params[0] + ':' + value + '|---Fail!')
             self.log.write('error', e.__str__())
             return False
 
@@ -160,11 +161,11 @@ class InterfaceKeywords:
         try:
             tree = etree.HTML(self.http.get_response_text())
             value = tree.xpath(params[0])
-            self.var_map[params[1]] = value
-            self.log.write('info', 'Try to get value: ' + params[0] + ':' + value + '|---Success!')
+            self.var_map.set_var(params[1], value)
+            self.log.write('info', 'Try to get value: |' + params[0] + ':' + value + '|---Success!')
             return True
         except Exception as e:
-            self.log.write('error', 'Try to get value: ' + params[0] + ':' + value + '|---Fail!')
+            self.log.write('error', 'Try to get value: |' + params[0] + ':' + value + '|---Fail!')
             self.log.write('error', e.__str__())
             return False
 
@@ -175,15 +176,18 @@ class InterfaceKeywords:
         :return: 布尔值结果
         """
         try:
-            value = self.http.get_res_by_json_path(params[0])
+            val = self.http.get_res_by_json_path(params[0])[0]
+            value = str(val)
             if value.find(params[1].strip()) != -1:
-                self.log.write('info', 'Assert json : ' + params[0] + ':' + value + '|---Success!')
+                self.log.write('info', 'Assert json : |' + params[0] + ':' + value + '|---Success!')
                 return True
             else:
-                self.log.write('error', 'Assert json : ' + params[0] + ':' + value + 'expect:' + params[1]+'|---Fail!')
+                self.log.write('error',
+                               'Assert json : |%s: %s , expect: %s |---Fail!' % (params[0], value, params[1]))
+                # self.log.write('error', 'Assert json : |' + params[0] + ':' + value + 'expect:' + params[1]+'|---Fail!')
                 return False
         except Exception as e:
-            self.log.write('error', 'Assert json : ' + params[0] + ':' + value + '|---Fail!')
+            self.log.write('error', 'Assert json : |' + params[0] + ':' + value + '|---Fail!')
             self.log.write('error', e.__str__())
             return False
 
@@ -196,13 +200,13 @@ class InterfaceKeywords:
         try:
             res = self.http.get_response_text()
             if res.find(params[0].strip()) != -1:
-                self.log.write('info', 'Assert res contain : ' + params[0] + '|---Success!')
+                self.log.write('info', 'Assert res contain : |' + params[0] + '|---Success!')
                 return True
             else:
-                self.log.write('error', 'Assert res contain : ' + params[0] + 'expect:' + params[1]+'|---Fail!')
+                self.log.write('error', 'Assert res contain : |' + params[0] + '|---Fail!')
                 return False
         except Exception as e:
-            self.log.write('error', 'Assert res contain : ' + params[0]  + '|---Fail!')
+            self.log.write('error', 'Assert res contain : |' + params[0] + '|---Fail!')
             self.log.write('error', e.__str__())
             return False
 

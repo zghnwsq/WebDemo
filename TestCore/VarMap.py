@@ -4,7 +4,7 @@
 class VarMap:
 
     def __init__(self):
-        self.vars = {}
+        self.vars = dict()
 
     def set_var(self, key, value):
         """

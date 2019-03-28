@@ -11,8 +11,8 @@ class Http:
         self.session = requests.session()
         self.url = ''
         self.response = None
-        self.headers = {}
-        self.cookie = {}
+        self.headers = dict()
+        self.cookie = dict()
         self.body = ''
         self.js = ''
 
@@ -147,7 +147,7 @@ class Http:
             self.session.headers = self.headers
         if cookie is not None:
             self.set_cookie(cookie)
-        self.session.cookies = self.cookie
+            self.session.cookies = self.cookie
         self.response = self.session.post(self.url, data=data or self.body, json=js or self.js)
         self.body = ''
         self.js = ''

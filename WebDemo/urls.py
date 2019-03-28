@@ -24,4 +24,6 @@ urlpatterns = [
     path('polls/', include('polls.urls')),
     path('accounts/', include('login.urls')),
     path('projects/', include('projects.urls')),
+    path('testcase/', include('testcase.urls')),
+    path('datasource/', include('datasource.urls')),
 ]

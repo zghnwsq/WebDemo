@@ -53,22 +53,25 @@ get_list_or_404()
 {{user.username}}
 
 #用例管理模型设计
-用例
-用例名 所属项目(F) 创建人(F) 用例文件路径 数据源(F)
+用例 TestCase
+用例名 所属项目(F) 创建人 用例文件路径 sheet名 数据源(F)
 
-数据源
-数据源id 数据源文件路径 数据源个数
+数据源 DataSource
+数据源名 所属项目(F) 数据源文件路径 sheet名 数据源个数
 
-任务管理
-任务名 用例id(F) 数据源id(F) 执行ip 执行状态
+任务管理(任务与用例一对多) TestPlan
+任务名 用例id(F) 数据源id(F) 执行机ip 数据源范围 执行状态
 
-任务执行历史
-执行id(unique not null) 任务id(F) 用例id(F) 数据源序号 执行开始时间 执行结束时间 执行结果
+任务执行历史 TestPlan_run_his
+执行id(unique not null) 任务id(F) 用例id(F)  执行开始时间 执行结束时间 执行结果 日志path
+
+任务执行详情 TestPlan_run_detail
+执行id(F)  数据源序号  执行开始时间 执行结束时间  执行结果
 
 
 #项目管理模型设计
 项目
-项目名称
+项目名称  状态  创建人
 
 用户项目
 用户名(F) 项目名称(F)
@@ -77,19 +80,25 @@ get_list_or_404()
 #测试框架设计
 日志类 ok
 读写excel ok
-读写txt half
+读写txt ok
 http接口类 ok
 接口关键字类 ok
 web element类
 web关键字类
-报告
-邮件
+keyword类 ok
+x 报告 x
+x 邮件 x
 全局参数类 ok
-testcase类
-testsuit类
-runner类(多线程)
+x testcase类 x
+testsuit类 ok 废弃
+runner类 ok
+main类(多线程) ok
+# 一个sheet存储一个testcase
 
-suit[suit, case, initRow, endRow, initTime, endTime, result]
+# 一次测试任务的执行需要向系统返回：该任务总体结果 单个数据源结果 log日志path
+
+废弃 suit[suit, case, initRow, endRow, initTime, endTime, result]
+
 
 case[Suit, TestCase, Action, P1, P2, P3, Result, Detail]
 

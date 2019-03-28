@@ -22,7 +22,7 @@ class Log:
         elif self.level == "critical":
             self.logger.setLevel(logging.CRITICAL)
         # 第二步，创建handler，用于写入日志文件
-        self.handler = logging.FileHandler(self.logfile, mode='a')
+        self.handler = logging.FileHandler(self.logfile, mode='a', encoding='utf-8')
         if self.level == "debug":
             self.handler.setLevel(logging.DEBUG)
         elif self.level == "info":
@@ -33,12 +33,26 @@ class Log:
             self.handler.setLevel(logging.ERROR)
         elif self.level == "critical":
             self.handler.setLevel(logging.CRITICAL)
+        # 添加控制台输出
+        self.consle = logging.StreamHandler()
+        if self.level == "debug":
+            self.consle.setLevel(logging.DEBUG)
+        elif self.level == "info":
+            self.consle.setLevel(logging.INFO)
+        elif self.level == "warning":
+            self.consle.setLevel(logging.WARNING)
+        elif self.level == "error":
+            self.consle.setLevel(logging.ERROR)
+        elif self.level == "critical":
+            self.consle.setLevel(logging.CRITICAL)
         # 第四步，定义handler的输出格式
         self.formatter = logging.Formatter(' %(asctime)s - %(levelname)s: %(message)s',
                                       datefmt='%a, %d %b %Y %H:%M:%S')
         self.handler.setFormatter(self.formatter)
+        self.consle.setFormatter(self.formatter)
         # 第五步，将logger添加到handler里面
         self.logger.addHandler(self.handler)
+        self.logger.addHandler(self.consle)
 
     def write(self, level, msg):
         # 写入日志
