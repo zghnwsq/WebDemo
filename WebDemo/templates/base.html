@@ -14,10 +14,10 @@
 </head>
 <body>
 <div id="head">
-    <div><h3>自动化测试平台</h3></div>
+    <div><h2>自动化测试平台</h2></div>
     <table>
         <tr>
-            <td><a href="{% url 'projects:index' %}">首页</a></td>
+            <td><a href="{% url 'projects:index' 1 %}">首页</a></td>
             <td><a href="{% url 'polls:logout' %}">注销</a></td>
             <td>{{user_name}}</td>
             <td>{{user_group}}</td>

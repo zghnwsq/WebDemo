@@ -1,7 +1,9 @@
+# coding:utf8
+
 from django.contrib.auth.views import LoginView
 from django.shortcuts import render
 from django.contrib.auth import authenticate,login
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponseRedirect
 from django.urls import reverse
 
 
@@ -25,7 +27,7 @@ class LoginView(LoginView):
             if redirect:
                 return HttpResponseRedirect(redirect)  # 转到登陆前页面
             else:
-                return HttpResponseRedirect(reverse('projects:index'))
+                return HttpResponseRedirect(reverse('projects:index', args=[1]))
         else:
             return render(request, 'login/login.html', {'error_message': "Premission Denined !", })
 

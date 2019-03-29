@@ -1,15 +1,16 @@
 # coding:utf8
 
-from django.shortcuts import render
+# from django.shortcuts import render
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views import generic
 from .models import Projects, ProjectsUser
 from django.contrib.auth.models import Group, User
 from login.models import Menu, RoleMenu
-from django.contrib.auth.decorators import login_required
+# from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404
-from django.http import HttpResponse, HttpResponseRedirect
-from django.urls import reverse
+# from django.http import HttpResponse, HttpResponseRedirect
+# from django.urls import reverse
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 
 
 # Create your views here.
@@ -17,9 +18,21 @@ class IndexView(LoginRequiredMixin, generic.ListView):
     template_name = 'projects/index.html'
     context_object_name = 'project_list'  # 指定传入模板的context的名字
 
-    def get_queryset(self):
+    def get_queryset(self, **kwargs):
         user_projects = ProjectsUser.objects.filter(user_id=self.request.user.id).values('project_id')
-        return Projects.objects.filter(id__in=user_projects)
+        projects = Projects.objects.filter(id__in=user_projects)
+        paginator = Paginator(projects, 10)
+        # page = self.request.GET.get('page')
+        page = self.kwargs['page']
+        try:
+            pj = paginator.page(page)
+        except PageNotAnInteger:
+            # 页数不是整数
+            pj = paginator.page(1)
+        except EmptyPage:
+            # 页数超范围
+            pj = paginator.page(paginator.num_pages)
+        return pj
 
     def get_context_data(self, **kwargs):
         # Call the base implementation first to get a context

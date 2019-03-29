@@ -9,11 +9,20 @@
     <!--</div>-->
 <!--</div>-->
 <!--{% endblock %}-->
+{% load static %}
+{% block statics %}
+<style type="text/css">
+    .pagination {
+        padding-right: 2%;
+        float: right;
+    }
+</style>
+{% endblock %}
 
 {% block content %}
     <div>
         {% if message %}<p>{{message}}</p>{% endif %}
-        <h3 class="projects">项 目 列 表</h3>
+        <h3>项 目 列 表</h3>
 {% if project_list %}
     <table id="list">
         <thead>
@@ -41,8 +50,17 @@
             {% endfor %}
         </tbody>
     </table>
+    <div class="pagination">
+        {% if project_list.has_previous %}
+            <button class="page_btn"><a href="./{{project_list.previous_page_number}}">上一页</a></button>
+        {% endif %}
+        <span class="current">Page {{project_list.number}} of {{project_list.paginator.num_pages}}</span>
+        {% if project_list.has_next %}
+            <button class="page_btn"><a href="./{{project_list.next_page_number}}">下一页</a></button>
+        {% endif %}
+    </div>
 {% else %}
-    <p>No Project avaliable</p>
+    <p>No Project available</p>
 {% endif %}
     </div>
 {% endblock %}

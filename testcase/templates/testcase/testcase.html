@@ -6,10 +6,14 @@
     div.search{
         padding-left: 10px;
         padding-top: 10px;
-        width: 90%;
+        width: 50%;
     }
     tr.search td {
         padding: 3px;
+    }
+    .pagination {
+        padding-right: 2%;
+        float: right;
     }
 </style>
 <script type="text/javascript">
@@ -28,12 +32,12 @@
         {% csrf_token %}
         <!--input name="project" type="text" placeholder="项目名称"-->
         <!--改用select-->
-        <div >
+        <div>
             <table style="width: 100%;">
                 <tbody>
                     <tr class="search">
                         <td >
-                            <select id="project_list" name="project" style="height: 30px; width: 80%;">
+                            <select id="project_list" name="project" style="height: 30px; width: 90%;">
                                 {% if project_list %}
                                     {% for project in project_list %}
                                     {% if selected_id %}
@@ -49,7 +53,7 @@
                                 {% endif %}
                             </select>
                         </td>
-                        <td><div id="do_search" style="width: 40px; height: 22px; text-align: center;" class="content_btn">查询</div></td>
+                        <td><button id="do_search"  class="btn1">查询</button></td>
                     </tr>
                 </tbody>
             </table>
@@ -58,7 +62,8 @@
     </form>
 </div>
 <div class="case_list">
-    <h3 class="projects">用 例 列 表</h3>
+    <h3 class="projects" style="display: inline-block">用 例 列 表</h3>
+    <button class="btn1" id="new_case" style="position: relative; left:80%">新增用例</button>
     {% if message %}<p>{{message}}</p>{% endif %}
         <table id="list">
             <thead>
@@ -80,11 +85,24 @@
                     <td>{{case.no}}</td>
                     <td>{{case.case}}</td>
                     <td>{{case.charge}}</td>
-                    <td></td>
+                    <td>
+                        <button>查看</button>
+                        <button><a href="{% url 'testcase:modify' case.id %}">修改</a></button>
+                        <button>删除</button>
+                    </td>
                     </tr>
                 {% endfor %}
             </tbody>
         </table>
+    <div class="pagination">
+        {% if case_list.has_previous %}
+            <button class="page_btn"><a href="./{{case_list.previous_page_number}}">上一页</a></button>
+        {% endif %}
+        <span class="current">Page {{case_list.number}} of {{case_list.paginator.num_pages}}</span>
+        {% if case_list.has_next %}
+            <button class="page_btn"><a href="./{{case_list.next_page_number}}">下一页</a></button>
+        {% endif %}
+    </div>
     {% endif %}
 </div>
 

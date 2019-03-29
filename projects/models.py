@@ -6,7 +6,7 @@ from django.contrib.auth.models import User
 class Projects(models.Model):
     project = models.CharField(max_length=32)
     status = models.CharField(max_length=8)
-    charge = models.ForeignKey(User('username'), on_delete=models.CASCADE)
+    charge = models.ForeignKey(User('username'), on_delete=models.SET('Null'))
 
     def __str__(self):
         return self.project

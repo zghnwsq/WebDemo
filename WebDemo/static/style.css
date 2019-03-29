@@ -20,6 +20,11 @@ div.content_btn {
             border-radius: 2px;
 }
 
+button.btn1 {
+    height:30px;
+    text-align: center;
+}
+
 li a {
     color: green;
 }
@@ -28,7 +33,7 @@ li a {
     background: #e6e5e5;
 }
 
-.projects {
+h3 {
     padding-left: 1%;
 }
 

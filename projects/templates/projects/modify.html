@@ -20,7 +20,8 @@
 {% if projects %}
     <form action="{% url 'projects:modify' projects.id %}" method="post">
         {% csrf_token %}
-        <table id="projects">
+        <h3>修改项目</h3>
+        <table id="list">
             <thead>
                 <tr>
                     <th>项目名称</th>
@@ -51,7 +52,7 @@
             border:1px solid #c7c7c7;
             border-radius: 2px;
             color: white;">
-            <a href="{% url 'projects:index' %}">返回</a>
+            <a href="{% url 'projects:index' 1 %}">返回</a>
         </div>
     </div>
 {% endblock %}
