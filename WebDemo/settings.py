@@ -128,4 +128,5 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'projects/static/projects'),
 ]
 
+MEDIA_ROOT = os.path.join(BASE_DIR, 'upload')
 # LOGIN_URL = 'polls/login/'

@@ -5,6 +5,8 @@ from django.shortcuts import render
 from django.contrib.auth import authenticate,login
 from django.http import HttpResponseRedirect
 from django.urls import reverse
+from django.contrib.auth.models import Group
+from login.models import Menu, RoleMenu
 
 
 class LoginView(LoginView):
@@ -24,6 +26,10 @@ class LoginView(LoginView):
         # user = authenticate(request, uname='ted', upassword='000')
         if user is not None:
             login(request, user)
+            user_name = request.user.username
+            request.session['user_name'] = user_name
+            user_group = Group.objects.get(user__username=user_name).name
+            request.session['user_group'] = user_group
             if redirect:
                 return HttpResponseRedirect(redirect)  # 转到登陆前页面
             else:

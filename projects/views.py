@@ -38,13 +38,13 @@ class IndexView(LoginRequiredMixin, generic.ListView):
         # Call the base implementation first to get a context
         context = super().get_context_data(**kwargs)
         request = self.request
-        user_name = request.user.username
-        user_group = Group.objects.get(user__username=user_name)
+        # user_name = request.user.username
+        user_group = request.session['user_group']
         rmenu = RoleMenu.objects.filter(role_name=user_group).values('menu')
         menu = Menu.objects.filter(menu_text__in=rmenu).order_by('order')
         context['menu'] = menu
-        context['user_group'] = user_group
-        context['user_name'] = user_name
+        context['user_group'] = request.session['user_group']
+        context['user_name'] = request.session['user_name']
         return context
 
 
@@ -57,13 +57,13 @@ class ModifyView(LoginRequiredMixin, generic.DetailView):
         # Call the base implementation first to get a context
         context = super().get_context_data(**kwargs)
         request = self.request
-        user_name = request.user.username
-        user_group = Group.objects.get(user__username=user_name)
+        # user_name = request.user.username
+        # user_group = Group.objects.get(user__username=user_name)
+        user_group = request.session['user_group']
         rmenu = RoleMenu.objects.filter(role_name=user_group).values('menu')
         menu = Menu.objects.filter(menu_text__in=rmenu).order_by('order')
-        context['menu'] = menu
-        context['user_group'] = user_group
-        context['user_name'] = user_name
+        context['user_group'] = request.session['user_group']
+        context['user_name'] = request.session['user_name']
         return context
 
     def post(self, request, pk):
@@ -78,8 +78,8 @@ class ModifyView(LoginRequiredMixin, generic.DetailView):
             })
         project.save()
         project = get_object_or_404(Projects, pk=pk)
-        user_name = request.user.username
-        user_group = Group.objects.get(user__username=user_name)
+        user_name = request.session['user_name']
+        user_group = request.session['user_group']
         rmenu = RoleMenu.objects.filter(role_name=user_group).values('menu')
         menu = Menu.objects.filter(menu_text__in=rmenu).order_by('order')
         # return HttpResponseRedirect(reverse('projects:index'))
