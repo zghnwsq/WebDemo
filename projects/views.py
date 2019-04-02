@@ -11,6 +11,7 @@ from django.shortcuts import render, get_object_or_404
 # from django.http import HttpResponse, HttpResponseRedirect
 # from django.urls import reverse
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
+from .form import *
 
 
 # Create your views here.
@@ -68,28 +69,43 @@ class ModifyView(LoginRequiredMixin, generic.DetailView):
 
     def post(self, request, pk):
         project = get_object_or_404(Projects, pk=pk)
-        if self.request.POST['project'] != '':
-            project.project = self.request.POST['project']
-        if self.request.POST['status'] != '':
-            project.status = self.request.POST['status']
-        if self.request.POST['project'] == '' or self.request.POST['status'] == '':
-            return render(self.request, 'projects/modify.html', {
-                'message': 'Empty Input'
-            })
-        project.save()
-        project = get_object_or_404(Projects, pk=pk)
-        user_name = request.session['user_name']
-        user_group = request.session['user_group']
-        rmenu = RoleMenu.objects.filter(role_name=user_group).values('menu')
-        menu = Menu.objects.filter(menu_text__in=rmenu).order_by('order')
-        # return HttpResponseRedirect(reverse('projects:index'))
-        context = {'message': '修改成功',
-                   'projects': project,
-                   'menu': menu,
-                   'user_group': user_group,
-                   'user_name': user_name
-                   }
-        return render(request, 'projects/modify.html', context)
+        form = ModifyForm(request.POST)
+        if form.is_valid():
+            if self.request.POST['project'] != '':
+                project.project = self.request.POST['project']
+            if self.request.POST['status'] != '':
+                project.status = self.request.POST['status']
+            if self.request.POST['project'] == '' or self.request.POST['status'] == '':
+                return render(self.request, 'projects/modify.html', {
+                    'message': 'Empty Input'
+                })
+            project.save()
+            project = get_object_or_404(Projects, pk=pk)
+            user_name = request.session['user_name']
+            user_group = request.session['user_group']
+            rmenu = RoleMenu.objects.filter(role_name=user_group).values('menu')
+            menu = Menu.objects.filter(menu_text__in=rmenu).order_by('order')
+            # return HttpResponseRedirect(reverse('projects:index'))
+            context = {'message': '修改成功',
+                       'projects': project,
+                       'menu': menu,
+                       'user_group': user_group,
+                       'user_name': user_name
+                       }
+            return render(request, 'projects/modify.html', context)
+        else:
+            user_name = request.session['user_name']
+            user_group = request.session['user_group']
+            rmenu = RoleMenu.objects.filter(role_name=user_group).values('menu')
+            menu = Menu.objects.filter(menu_text__in=rmenu).order_by('order')
+            # return HttpResponseRedirect(reverse('projects:index'))
+            context = {'error': form.errors,
+                       'projects': project,
+                       'menu': menu,
+                       'user_group': user_group,
+                       'user_name': user_name
+                       }
+            return render(request, 'projects/modify.html', context)
 
 
 

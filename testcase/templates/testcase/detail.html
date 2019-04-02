@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+
+{% load static %}
+{% block statics %}
+<style type="text/css">
+    #info {
+        margin-left: 10px;
+    }
+    #info span{
+        margin-left: 10px;
+    }
+    #case {
+        margin-top: 10px;
+        margin-left: 5px;
+        margin-right: 5px;
+        width: 100%;
+        table-layout: fixed;
+        word-break: break-all;
+        word-wrap: break-word;
+    }
+    #case td{
+        max-width: 100%;
+    }
+</style>
+<script type="text/javascript">
+    $(document).ready(function(){
+
+    });
+</script>
+{% endblock %}
+
+{% block content %}
+<h3>用例详情</h3>
+
+{% if testcase %}
+<div id="info">
+    <span><b>Testcase No: {{testcase.no}}</b></span>
+    <span><b>Testcase Name: {{testcase.case}}</b></span>
+</div>
+<button class="btn1" id="back" style="float:right;">
+    {% if project_id %}
+    <a href=" {% url 'testcase:search_result' project_id 1 %}">返回</a>
+    {% else %}
+    <button><a href="{% url 'testcase:testcase'%}">返回</a></button>
+    {% endif %}
+</button>
+{% endif %}
+{% if message %}<div>{{message}}</div>{% endif %}
+{% if case %}
+<div style="width: 100%;">
+<table id="case">
+    <tbody>
+    {% for row in case %}
+        {% if forloop.counter|divisibleby:"2" %}
+            <tr class="even">
+            {% else %}
+            <tr>
+            {% endif %}
+            {% for col in row %}
+                <td>{{col}}</td>
+            {% endfor %}
+            </tr>
+    {% endfor %}
+    </tbody>
+</table>
+</div>
+{% else %}
+<div style="margin-left:50%;">No case imported!</div>
+{% endif %}
+{% endblock %}

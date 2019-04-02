@@ -17,6 +17,7 @@
 
 {% block content %}
 {% if message %}<p id="message" style="padding-left: 50%">{{message}}</p>{% endif %}
+{% if error %}<div id="error" style="padding-left: 0%">{{error}}</div>{% endif %}
 {% if projects %}
     <form action="{% url 'projects:modify' projects.id %}" method="post">
         {% csrf_token %}

@@ -64,7 +64,9 @@
 </div>
 <div class="case_list">
     <h3 class="projects" style="display: inline-block">用 例 列 表</h3>
-    <button class="btn1" id="new_case" style="position: relative; left:80%">新增用例</button>
+    <button class="btn1" id="new_case" style="position: relative; left:80%">
+        <a href=" {% url 'testcase:new' %}">新增用例</a>
+    </button>
         <table id="list">
             <thead>
                 <tr>
@@ -86,7 +88,7 @@
                     <td>{{case.case}}</td>
                     <td>{{case.charge}}</td>
                     <td>
-                        <button>查看</button>
+                        <button><a href="{% url 'testcase:detail' case.project_id case.id %}">查看</a></button>
                         <button><a href="{% url 'testcase:modify' case.id %}">修改</a></button>
                         <button><a href="{% url 'testcase:delete' case.id %}">删除</a></button>
                     </td>

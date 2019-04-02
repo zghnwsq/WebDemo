@@ -3,12 +3,12 @@
 {% load static %}
 {% block statics %}
 <style type="text/css">
-    #modify {
+    #new {
         position: relative;
         left: 30%;
         padding-top: 10px;
     }
-    #modify div{
+    #new div{
         padding: 10px;
     }
     button {
@@ -26,49 +26,48 @@
 
 {% block content %}
 {% if message %}<p id="message" style="padding-left: 50%">{{message}}</p>{% endif %}
-<h3>修改用例</h3>
-{% if testcase %}
-<form id="modify" action="{% url 'testcase:modify' testcase.id %}" enctype="multipart/form-data" method="post">
+<h3>新增用例</h3>
+<form id="new" action="{% url 'testcase:new' %}" enctype="multipart/form-data" method="post">
     {% csrf_token %}
     <div>
         <span>用例编号:</span>
-        <input type="text" name="no" placeholder="{{testcase.no}}">
+            <input type="text" name="no" placeholder="Testcase No">
+            <span style="color: red;">*</span>
     </div>
     <div>
         <span>用例名称:</span>
-        <input type="text" name="case" placeholder="{{testcase.case}}">
+        <input type="text" name="case" placeholder="Testcase Name">
+        <span style="color: red;">*</span>
     </div>
     <!--project select-->
     <div>
         <span>项目:</span>
-        <select id="pj_select" name="project" disabled="disabled">
+        <select id="pj_select" name="project">
             {% if projects %}
                 {% for project in projects %}
-                    {% if testcase.project_id|stringformat:"d" == project.id|stringformat:"d" %}
-                        <option value="{{project.id}}" selected="selected">{{project.project}}</option>
-                    {% else %}
-                        <option value="{{project.id}}">{{project.project}}</option>
-                    {% endif %}
+                    <option value="{{project.id}}">{{project.project}}</option>
                 {% endfor %}
             {% endif %}
         </select>
-        <span style="font-size: small;"><i>(不可修改)</i></span>
+        <span style="color: red;">*</span>
     </div>
     <!--file upload-->
     <div>
         <span>导入:</span>
-        <input type="file" name="file">
+        <input type="file" name="file" placeholder="Testcase excel import">
     </div>
     <div>
         <span>sheet名:</span>
-        <input type="text" name="sheet" placeholder="{{testcase.sheet}}">
+        <input type="text" name="sheet" placeholder="Testcase sheetname">
     </div>
     <div>
         <button id="submit">保存</button>
+        {% if testcase %}
         <button><a href="{% url 'testcase:search_result' testcase.project_id 1 %}">返回</a></button>
+        {% else %}
+        <button><a href="{% url 'testcase:testcase'%}">返回</a></button>
+        {% endif %}
     </div>
 </form>
-{% endif %}
 
 {% endblock %}
-

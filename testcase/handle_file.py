@@ -4,6 +4,7 @@
 from django.core.files.storage import *
 import os
 
+
 def handle_uploaded_case(f, project_id, case_id):
     # print(f.name)
     suffix = '.'+f.name.split('.')[1]

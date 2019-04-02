@@ -1,4 +1,4 @@
 $(document).ready(function(){
-    $("#message").slideUp(2000);
+    $("#message").slideUp(5000);
 });
 

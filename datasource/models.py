@@ -13,6 +13,7 @@ class Datasource(models.Model):
     path = models.CharField(max_length=72)
     sheet = models.CharField(max_length=32)
     length = models.IntegerField()
+    update_time = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.name

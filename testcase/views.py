@@ -2,13 +2,13 @@
 
 import os
 from django.shortcuts import render, get_object_or_404
-# from django.contrib.auth.models import Group, User
+from django.contrib.auth.models import Group, User
 from login.models import Menu, RoleMenu
 from projects.models import ProjectsUser, Projects
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views import generic
 from .models import TestCase
-from testcase.modify import ModifyForm
+from testcase.form import ModifyForm, NewForm
 # from django.views.generic.edit import FormView
 # from datasource.models import Datasource
 from django.contrib.auth.decorators import login_required
@@ -17,6 +17,7 @@ from django.http import  HttpResponseRedirect
 from django.urls import reverse
 from .handle_file import handle_uploaded_case
 from django.conf import settings
+from TestCore.Excel import Excel
 # Create your views here.
 
 
@@ -26,7 +27,7 @@ class IndexView(LoginRequiredMixin, generic.ListView):
 
     def get_queryset(self):
         user_projects = ProjectsUser.objects.filter(user_id=self.request.user.id).values('project_id')
-        return Projects.objects.filter(id__in=user_projects)
+        return Projects.objects.filter(id__in=user_projects).filter(status='1')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -43,7 +44,7 @@ class IndexView(LoginRequiredMixin, generic.ListView):
 @login_required
 def search(request):
     user_projects = ProjectsUser.objects.filter(user_id=request.user.id).values('project_id')
-    project_list = Projects.objects.filter(id__in=user_projects)
+    project_list = Projects.objects.filter(id__in=user_projects).filter(status='1')
     # user_name = request.user.username
     user_group = request.session['user_group']
     rmenu = RoleMenu.objects.filter(role_name=user_group).values('menu')
@@ -67,7 +68,7 @@ def search(request):
 @login_required
 def search_result(request, selected, page):
     user_projects = ProjectsUser.objects.filter(user_id=request.user.id).values('project_id')
-    project_list = Projects.objects.filter(id__in=user_projects)
+    project_list = Projects.objects.filter(id__in=user_projects).filter(status='1')
     user_name = request.session['user_name']
     user_group = request.session['user_group']
     rmenu = RoleMenu.objects.filter(role_name=user_group).values('menu')
@@ -116,60 +117,117 @@ class ModifyView(LoginRequiredMixin, generic.FormView):
         return context
 
     def get(self, request, case_id):
-        # user_name = request.user.username
-        # user_group = Group.objects.get(user__username=user_name)
-        # rmenu = RoleMenu.objects.filter(role_name=user_group).values('menu')
-        # menu = Menu.objects.filter(menu_text__in=rmenu).order_by('order')
-        # context = {
-        #     'menu': menu,
-        #     'user_group': user_group,
-        #     'user_name': user_name,
-        # }
-        # user_projects = ProjectsUser.objects.filter(user_id=self.request.user.id).values('project_id')
-        # projects = Projects.objects.filter(id__in=user_projects).filter(status='1')
-        # context['projects'] = projects
-        # testcase = TestCase.objects.get(id=case_id)
-        # context['testcase'] = testcase
         context = self.get_data(request, case_id)
         return render(request, 'testcase/modify.html', context)
 
     def post(self, request, case_id, *args, **kwargs):
-        testcase = TestCase.objects.get(id=case_id)
-        no = request.POST['no']
-        if no:
-            testcase.no = no
-        case = request.POST['case']
-        if case:
-            testcase.case = case
-        # project = request.POST['project']
-        # if project:
-        #     testcase.project = Projects.objects.get(id=project)
         form = ModifyForm(request.POST, request.FILES)
         if form.is_valid():
+            testcase = TestCase.objects.get(id=case_id)
+            no = request.POST['no']
+            if no:
+                testcase.no = no
+            case = request.POST['case']
+            if case:
+                testcase.case = case
+            # project = request.POST['project']
+            # if project:
+            #     testcase.project = Projects.objects.get(id=project)
             # print(request.FILES['file'].name)
-            if request.FILES['file'].name.find('.xls') == -1:
+            if 'file' in request.FILES.keys():
+                if request.FILES['file'].name.find('.xls') == -1:
+                    context = self.get_data(request, case_id)
+                    context['message'] = 'Wrong file type!'
+                    return render(request, 'testcase/modify.html', context)
+                file_path = handle_uploaded_case(request.FILES['file'], testcase.project_id, case_id)
+                testcase.path = file_path
+                sheet = request.POST['sheet']
+                if sheet:
+                    testcase.sheet = sheet
+                else:
+                    context = self.get_data(request, case_id)
+                    context['message'] = 'Empty sheet name!'
+                    return render(request, 'testcase/modify.html', context)
+            # 没有修改
+            elif not no and not case and 'file' not in request.FILES.keys():
                 context = self.get_data(request, case_id)
-                context['message'] = 'Wrong file type!'
+                context['message'] = 'Nothing changed!'
                 return render(request, 'testcase/modify.html', context)
-            file_path = handle_uploaded_case(request.FILES['file'], testcase.project_id, case_id)
-            testcase.path = file_path
-            sheet = request.POST['sheet']
-            if sheet:
-                testcase.sheet = sheet
-            else:
-                context = self.get_data(request, case_id)
-                context['message'] = 'Empty sheet name!'
-                return render(request, 'testcase/modify.html', context)
-        # 没有修改
-        if not no and not case and not form.is_valid():
-            context = self.get_data(request, case_id)
-            context['message'] = 'Nothing changed!'
-            return render(request, 'testcase/modify.html', context)
-        else:
             testcase.save()
             context = self.get_data(request, case_id)
             context['message'] = 'Success!'
             return render(request, 'testcase/modify.html', context)
+        else:
+            context = self.get_data(request, case_id)
+            context['message'] = form.errors
+            return render(request, 'testcase/modify.html', context)
+
+
+class NewView(LoginRequiredMixin, generic.FormView):
+    template_name = 'testcase/new.html'
+    form_class = NewForm
+
+    def get_data(self, request):
+        user_name = request.session['user_name']
+        user_group = request.session['user_group']
+        rmenu = RoleMenu.objects.filter(role_name=user_group).values('menu')
+        menu = Menu.objects.filter(menu_text__in=rmenu).order_by('order')
+        context = {
+            'menu': menu,
+            'user_group': user_group,
+            'user_name': user_name,
+        }
+        user_projects = ProjectsUser.objects.filter(user_id=self.request.user.id).values('project_id')
+        projects = Projects.objects.filter(id__in=user_projects).filter(status='1')
+        context['projects'] = projects
+        # testcase = TestCase.objects.get(id=case_id)
+        # context['testcase'] = testcase
+        return context
+
+    def get(self, request):
+        context = self.get_data(request)
+        return render(request, 'testcase/new.html', context)
+
+    def post(self, request,*args, **kwargs):
+        form = NewForm(request.POST, request.FILES)
+        print(form.is_valid())
+        if form.is_valid():
+            no = request.POST['no']
+            case = request.POST['case']
+            pj = request.POST['project']
+            project = Projects.objects.get(id=pj)
+            # if not no and not case and not project:
+            #     context = self.get_data(request)
+            #     context['message'] = 'Empty Input !'
+            #     return render(request, 'testcase/new.html', context)
+            charge = User.objects.get(username=request.session['user_name'])
+            testcase = TestCase(no=no, case=case, project=project, charge=charge)
+            testcase.save()
+        # testcase = TestCase.objects.get(no=no)
+            if 'file' in request.FILES.keys():
+                if request.FILES['file'].name.find('.xls') == -1:
+                    context = self.get_data(request)
+                    context['message'] = 'Wrong file type!'
+                    return render(request, 'testcase/new.html', context)
+                file_path = handle_uploaded_case(request.FILES['file'], project.id, testcase.id)
+                testcase.path = file_path
+                sheet = request.POST['sheet']
+                if sheet:
+                    testcase.sheet = sheet
+                else:
+                    context = self.get_data(request)
+                    context['message'] = 'Empty sheet name!'
+                    return render(request, 'testcase/new.html', context)
+                testcase.save()
+            context = self.get_data(request)
+            context['testcase'] = testcase
+            context['message'] = 'Success!'
+            return render(request, 'testcase/new.html', context)
+        else:
+            context = self.get_data(request)
+            context['message'] = form.errors
+            return render(request, 'testcase/new.html', context)
+
 
 @login_required
 def delete(request, case_id):
@@ -197,6 +255,47 @@ def delete(request, case_id):
                'message': 'Delete success!'
                }
     return render(request, 'testcase/testcase.html', context)
+
+
+class DetailView(LoginRequiredMixin, generic.ListView):
+    template_name = 'testcase/detail.html'
+    context_object_name = 'case'
+
+    def get_queryset(self, **kwargs):
+        case_id = self.kwargs['case_id']
+        testcase = TestCase.objects.get(id=case_id)
+        path = testcase.path
+        sheet = testcase.sheet
+        base = os.path.join(settings.MEDIA_ROOT, 'cases')
+        if path and sheet:
+            path = os.path.join(base, path)
+            if os.path.isfile(path):
+                case = Excel.read_sheet(path, sheet)
+                if case:
+                    return case
+                    # print(case)
+                else:
+                    return None
+            else:
+                return None
+        else:
+            return None
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        request = self.request
+        user_group = request.session['user_group']
+        rmenu = RoleMenu.objects.filter(role_name=user_group).values('menu')
+        menu = Menu.objects.filter(menu_text__in=rmenu).order_by('order')
+        case_id = self.kwargs['case_id']
+        testcase = TestCase.objects.get(id=case_id)
+        context['menu'] = menu
+        context['user_group'] = request.session['user_group']
+        context['user_name'] = request.session['user_name']
+        context['testcase'] = testcase
+        context['project_id'] = self.kwargs['project_id']
+        return context
+
 
 
 
