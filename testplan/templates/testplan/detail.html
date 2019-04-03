@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+
+{% load static %}
+{% block statics %}
+<style type="text/css">
+    #detail {
+        position: relative;
+        left: 30%;
+        padding-top: 10px;
+    }
+    #detail div{
+        padding: 10px;
+    }
+    button {
+        margin-left: 5%;
+    }
+</style>
+<script type="text/javascript">
+    $(document).ready(function(){
+
+    });
+</script>
+{% endblock %}
+
+{% block content %}
+{% if message %}<p id="message" style="padding-left: 50%">{{message}}</p>{% endif %}
+<h3>任务详情</h3>
+<form id="detail" action="" method="post">
+    {% csrf_token %}
+    <div>
+        <span>任务编号:</span>
+            <input type="text" name="no" placeholder="{{testplan.no}}" disabled="disabled">
+    </div>
+    <div>
+        <span>任务名称:</span>
+        <input type="text" name="name" placeholder="{{testplan.name}}" disabled="disabled">
+    </div>
+    <!--project select-->
+    <div>
+        <span>项目:</span>
+        <select id="pj_select" name="project" disabled="disabled">
+            <option value="{{testplan.project_id}}" selected="selected">{{project.project}}</option>
+        </select>
+    </div>
+    <!--case select-->
+    <div>
+        <span>用例:</span>
+        <select id="case_select" name="testcase" disabled="disabled">
+            <option value="{{testplan.case_id}}" selected="selected">{{case.case}}</option>
+        </select>
+    </div>
+    <!--ds select-->
+        <div>
+        <span>数据源:</span>
+        <select id="datasource_select" name="datasource" disabled="disabled">
+            <option value="{{testplan.ds_id}}" selected="selected">{{ds.name}}</option>
+        </select>
+    </div>
+    <!--ip-->
+    <div>
+        <span>IP:</span>
+        <input type="text" name="ip" placeholder="{{testplan.ip}}" disabled="disabled">
+    </div>
+    <!--ds_range-->
+    <div>
+        <span>数据源执行范围:</span>
+        <input type="text" name="ds_range" placeholder="{{testplan.ds_range}}" disabled="disabled">
+    </div>
+    <!--button-->
+    <div>
+        {% if testplan %}
+        <button><a href="{% url 'testplan:search_result' testplan.project_id 1 %}">返回</a></button>
+        {% else %}
+        <button><a href="{% url 'testplan:testplan'%}">返回</a></button>
+        {% endif %}
+    </div>
+</form>
+
+{% endblock %}

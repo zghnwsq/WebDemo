@@ -1,0 +1,106 @@
+{% extends "base.html" %}
+
+{% load static %}
+{% block statics %}
+<style type="text/css">
+    #modify {
+        position: relative;
+        left: 30%;
+        padding-top: 10px;
+    }
+    #modify div{
+        padding: 10px;
+    }
+    button {
+        margin-left: 5%;
+    }
+</style>
+<script type="text/javascript">
+    $(document).ready(function(){
+        $("#submit").click(function(){
+                $("#modify").submit();
+            });
+    });
+</script>
+{% endblock %}
+
+{% block content %}
+{% if message %}<p id="message" style="padding-left: 50%">{{message}}</p>{% endif %}
+<h3>修改任务</h3>
+{% if testplan %}
+<form id="modify" action="{% url 'testplan:modify' testplan.id %}" enctype="multipart/form-data" method="post">
+    {% csrf_token %}
+    <div>
+        <span>任务编号:</span>
+        <input type="text" name="no" placeholder="{{testplan.no}}">
+    </div>
+    <div>
+        <span>任务名称:</span>
+        <input type="text" name="name" placeholder="{{testplan.name}}">
+    </div>
+    <!--project select-->
+    <div>
+        <span>项目:</span>
+        <select id="pj_select" name="project" disabled="disabled">
+            {% if projects %}
+                {% for project in projects %}
+                    {% if testplan.project_id|stringformat:"d" == project.id|stringformat:"d" %}
+                        <option value="{{project.id}}" selected="selected">{{project.project}}</option>
+                    {% else %}
+                        <option value="{{project.id}}">{{project.project}}</option>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+        </select>
+        <span style="font-size: small;"><i>(不可修改)</i></span>
+    </div>
+    <!--case select-->
+    <div>
+        <span>用例:</span>
+        <select id="case_select" name="testcase">
+            {% if case_list %}
+                {% for case in case_list %}
+                    {% if testplan.case_id|stringformat:"d" == case.id|stringformat:"d" %}
+                        <option value="{{case.id}}" selected="selected">{{case.case}}</option>
+                    {% else %}
+                        <option value="{{case.id}}">{{case.case}}</option>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+        </select>
+    </div>
+    <!--ds select-->
+        <div>
+        <span>数据源:</span>
+        <select id="datasource_select" name="datasource">
+            {% if datasource_list %}
+                {% for datasource in datasource_list %}
+                    {% if testplan.ds_id|stringformat:"d" == datasource.id|stringformat:"d" %}
+                        <option value="{{datasource.id}}" selected="selected">{{datasource.name}}</option>
+                    {% else %}
+                        <option value="{{datasource.id}}">{{datasource.name}}</option>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+        </select>
+    </div>
+    <!--ip-->
+    <div>
+        <span>IP:</span>
+        <input type="text" name="ip" placeholder="{{testplan.ip}}">
+    </div>
+    <!--ds_range-->
+    <div>
+        <span>数据源执行范围:</span>
+        <input type="text" name="ds_range" placeholder="{{testplan.ds_range}}">
+    </div>
+    <!--button-->
+    <div>
+        <button id="submit">保存</button>
+        <button><a href="{% url 'testplan:search_result' testplan.project_id 1 %}">返回</a></button>
+    </div>
+</form>
+{% endif %}
+
+{% endblock %}
+

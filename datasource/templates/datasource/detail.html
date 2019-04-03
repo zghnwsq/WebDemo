@@ -9,7 +9,7 @@
     #info span{
         margin-left: 10px;
     }
-    #case {
+    #datasource {
         margin-top: 10px;
         margin-left: 5px;
         margin-right: 5px;
@@ -32,25 +32,25 @@
 {% block content %}
 <h3>用例详情</h3>
 
-{% if testcase %}
+{% if datasource %}
 <div id="info">
-    <span><b>Testcase No: {{testcase.no}}</b></span>
-    <span><b>Testcase Name: {{testcase.case}}</b></span>
+    <span><b>Datasource No: {{datasource.no}}</b></span>
+    <span><b>Datasource Name: {{datasource.name}}</b></span>
 </div>
 <button class="btn1" id="back" style="float:right;">
     {% if project_id %}
-    <a href=" {% url 'testcase:search_result' project_id 1 %}">返回</a>
+    <a href=" {% url 'datasource:search_result' project_id 1 %}">返回</a>
     {% else %}
-    <button><a href="{% url 'testcase:testcase'%}">返回</a></button>
+    <button><a href="{% url 'datasource:datasource'%}">返回</a></button>
     {% endif %}
 </button>
 {% endif %}
 {% if message %}<div>{{message}}</div>{% endif %}
-{% if case %}
+{% if excel %}
 <div style="width: 100%;">
-<table id="case">
+<table id="datasource">
     <tbody>
-    {% for row in case %}
+    {% for row in excel %}
         {% if forloop.counter|divisibleby:"2" %}
             <tr class="even">
             {% else %}
@@ -65,6 +65,6 @@
 </table>
 </div>
 {% else %}
-<div style="margin-left:50%;">No case file imported!</div>
+<div style="margin-left:50%;">No datasource file imported!</div>
 {% endif %}
 {% endblock %}

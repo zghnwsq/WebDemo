@@ -31,6 +31,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'testplan.apps.TestplanConfig',
     'testcase.apps.TestcaseConfig',
     'datasource.apps.DatasourceConfig',
     'login.apps.LoginConfig',
@@ -129,4 +130,4 @@ STATICFILES_DIRS = [
 ]
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'upload')
-# LOGIN_URL = 'polls/login/'
+LOGIN_URL = '/login/'

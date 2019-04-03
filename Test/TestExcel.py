@@ -8,6 +8,7 @@ from TestCore.Excel import Excel
 #         print(i)
 
 sht = Excel.read_sheet('D:/20171126/Git/InterfaceTest/DataDriven.xlsx', 'data')
+print(len(sht[0])-1)
 if sht is not None:
     for i in sht:
         print(i)

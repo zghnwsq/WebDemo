@@ -10,9 +10,9 @@ class Datasource(models.Model):
     name = models.CharField(max_length=50)
     project = models.ForeignKey(Projects, on_delete=models.PROTECT)
     charge = models.ForeignKey(User('username'), on_delete=models.SET('Null'))
-    path = models.CharField(max_length=72)
-    sheet = models.CharField(max_length=32)
-    length = models.IntegerField()
+    path = models.CharField(max_length=72, null=True, blank=True)
+    sheet = models.CharField(max_length=32, null=True, blank=True)
+    length = models.IntegerField(null=True, blank=True)
     update_time = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+
+{% load static %}
+{% block statics %}
+<style type="text/css">
+    #modify {
+        position: relative;
+        left: 30%;
+        padding-top: 10px;
+    }
+    #modify div{
+        padding: 10px;
+    }
+    button {
+        margin-left: 5%;
+    }
+</style>
+<script type="text/javascript">
+    $(document).ready(function(){
+        $("#submit").click(function(){
+                $("#modify").submit();
+            });
+    });
+</script>
+{% endblock %}
+
+{% block content %}
+{% if message %}<p id="message" style="padding-left: 50%">{{message}}</p>{% endif %}
+<h3>修改数据源</h3>
+{% if datasource %}
+<form id="modify" action="{% url 'datasource:modify' datasource.id %}" enctype="multipart/form-data" method="post">
+    {% csrf_token %}
+    <div>
+        <span>数据源编号:</span>
+        <input type="text" name="no" placeholder="{{datasource.no}}">
+    </div>
+    <div>
+        <span>数据源名称:</span>
+        <input type="text" name="datasource" placeholder="{{datasource.name}}">
+    </div>
+    <!--project select-->
+    <div>
+        <span>项目:</span>
+        <select id="pj_select" name="project" disabled="disabled">
+            {% if projects %}
+                {% for project in projects %}
+                    {% if datasource.project_id|stringformat:"d" == project.id|stringformat:"d" %}
+                        <option value="{{project.id}}" selected="selected">{{project.project}}</option>
+                    {% else %}
+                        <option value="{{project.id}}">{{project.project}}</option>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+        </select>
+        <span style="font-size: small;"><i>(不可修改)</i></span>
+    </div>
+    <!--file upload-->
+    <div>
+        <span>导入:</span>
+        <input type="file" name="file">
+    </div>
+    <div>
+        <span>sheet名:</span>
+        <input type="text" name="sheet" placeholder="{{datasource.sheet}}">
+    </div>
+    <div>
+        <button id="submit">保存</button>
+        <button><a href="{% url 'datasource:search_result' datasource.project_id 1 %}">返回</a></button>
+    </div>
+</form>
+{% endif %}
+
+{% endblock %}
+

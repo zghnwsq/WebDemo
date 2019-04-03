@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+
+{% load static %}
+{% block statics %}
+<style type="text/css">
+    #new {
+        position: relative;
+        left: 30%;
+        padding-top: 10px;
+    }
+    #new div{
+        padding: 10px;
+    }
+    button {
+        margin-left: 5%;
+    }
+</style>
+<script type="text/javascript">
+    $(document).ready(function(){
+        $("#submit").click(function(){
+                $("#modify").submit();
+            });
+    });
+</script>
+{% endblock %}
+
+{% block content %}
+{% if message %}<p id="message" style="padding-left: 50%">{{message}}</p>{% endif %}
+<h3>新增数据源</h3>
+<form id="new" action="{% url 'datasource:new' %}" enctype="multipart/form-data" method="post">
+    {% csrf_token %}
+    <div>
+        <span>数据源编号:</span>
+            <input type="text" name="no" placeholder="Datasource No">
+            <span style="color: red;">*</span>
+    </div>
+    <div>
+        <span>数据源名称:</span>
+        <input type="text" name="datasource" placeholder="Datasource Name">
+        <span style="color: red;">*</span>
+    </div>
+    <!--project select-->
+    <div>
+        <span>项目:</span>
+        <select id="pj_select" name="project">
+            {% if projects %}
+                {% for project in projects %}
+                    <option value="{{project.id}}">{{project.project}}</option>
+                {% endfor %}
+            {% endif %}
+        </select>
+        <span style="color: red;">*</span>
+    </div>
+    <!--file upload-->
+    <div>
+        <span>导入:</span>
+        <input type="file" name="file" placeholder="Datasource excel import">
+    </div>
+    <div>
+        <span>sheet名:</span>
+        <input type="text" name="sheet" placeholder="Datasource sheetname">
+    </div>
+    <div>
+        <button id="submit">保存</button>
+        {% if testcase %}
+        <button><a href="{% url 'datasource:search_result' datasource.project_id 1 %}">返回</a></button>
+        {% else %}
+        <button><a href="{% url 'datasource:datasource'%}">返回</a></button>
+        {% endif %}
+    </div>
+</form>
+
+{% endblock %}

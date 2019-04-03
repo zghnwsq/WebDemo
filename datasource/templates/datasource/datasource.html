@@ -1,0 +1,111 @@
+{% extends "base.html" %}
+
+{% load static %}
+{% block statics %}
+<style type="text/css">
+    div.search{
+        padding-left: 10px;
+        padding-top: 10px;
+        width: 50%;
+    }
+    tr.search td {
+        padding: 3px;
+    }
+    .pagination {
+        padding-right: 2%;
+        float: right;
+    }
+</style>
+<script type="text/javascript">
+    $(document).ready(function(){
+        $("#do_search").click(function(){
+                $("#search_form").submit();
+            });
+        $("#message").slideUp(3000);
+    });
+</script>
+{% endblock %}
+
+{% block content %}
+{% if message %}<div id="message"><p style="padding-left: 50%;"><strong>{{ message }}</strong></p></div>{% endif%}
+<div class="search">
+    <form id="search_form" action="{% url 'datasource:search' %}" method="post">
+        {% csrf_token %}
+        <!--input name="project" type="text" placeholder="项目名称"-->
+        <!--改用select-->
+        <div>
+            <table style="width: 100%;">
+                <tbody>
+                    <tr class="search">
+                        <td >
+                            <select id="project_list" name="project" style="height: 30px; width: 90%;">
+                                {% if project_list %}
+                                    {% for project in project_list %}
+                                    {% if selected_id %}
+                                        {% if  project.id|stringformat:"s" == selected_id|stringformat:"s" %}
+                                            <option value="{{project.id}}" selected="selected">{{project.project}}</option>
+                                        {% else %}
+                                            <option value="{{project.id}}">{{project.project}}</option>
+                                        {% endif %}
+                                    {% else %}
+                                        <option value="{{project.id}}">{{project.project}}</option>
+                                    {% endif %}
+                                    {% endfor %}
+                                {% endif %}
+                            </select>
+                        </td>
+                        <td><button id="do_search"  class="btn1">查询</button></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </form>
+</div>
+<div class="case_list">
+    <h3 class="projects" style="display: inline-block">数 据 源 列 表</h3>
+    <button class="btn1" id="new_case" style="position: relative; left:80%">
+        <a href=" {% url 'datasource:new' %}">新增数据源</a>
+    </button>
+        <table id="list">
+            <thead>
+                <tr>
+                    <th>数据源编号</th>
+                    <th>数据源名称</th>
+                    <th>创建人</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+    {% if datasource_list %}
+            <tbody>
+                {% for datasource in datasource_list %}
+                    {% if forloop.counter|divisibleby:"2" %}
+                    <tr class="even">
+                    {% else %}
+                    <tr>
+                    {% endif %}
+                    <td>{{datasource.no}}</td>
+                    <td>{{datasource.name}}</td>
+                    <td>{{datasource.charge}}</td>
+                    <td>
+                        <button><a href="{% url 'datasource:detail' datasource.project_id datasource.id %}">查看</a></button>
+                        <button><a href="{% url 'datasource:modify' datasource.id %}">修改</a></button>
+                        <button><a href="{% url 'datasource:delete' datasource.id %}">删除</a></button>
+                    </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    <div class="pagination">
+        {% if datasource_list.has_previous %}
+            <button class="page_btn"><a href="./{{datasource_list.previous_page_number}}">上一页</a></button>
+        {% endif %}
+        <span class="current">Page {{datasource_list.number}} of {{datasource_list.paginator.num_pages}}</span>
+        {% if datasource_list.has_next %}
+            <button class="page_btn"><a href="./{{datasource_list.next_page_number}}">下一页</a></button>
+        {% endif %}
+    </div>
+    {% endif %}
+</div>
+
+{% endblock %}

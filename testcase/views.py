@@ -13,7 +13,7 @@ from testcase.form import ModifyForm, NewForm
 # from datasource.models import Datasource
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
-from django.http import  HttpResponseRedirect
+from django.http import HttpResponseRedirect
 from django.urls import reverse
 from .handle_file import handle_uploaded_case
 from django.conf import settings
@@ -190,16 +190,16 @@ class NewView(LoginRequiredMixin, generic.FormView):
 
     def post(self, request,*args, **kwargs):
         form = NewForm(request.POST, request.FILES)
-        print(form.is_valid())
+        # print(form.is_valid())
         if form.is_valid():
             no = request.POST['no']
             case = request.POST['case']
             pj = request.POST['project']
             project = Projects.objects.get(id=pj)
-            # if not no and not case and not project:
-            #     context = self.get_data(request)
-            #     context['message'] = 'Empty Input !'
-            #     return render(request, 'testcase/new.html', context)
+            if not project:
+                context = self.get_data(request)
+                context['message'] = 'Project Required !'
+                return render(request, 'testcase/new.html', context)
             charge = User.objects.get(username=request.session['user_name'])
             testcase = TestCase(no=no, case=case, project=project, charge=charge)
             testcase.save()

@@ -1,0 +1,115 @@
+{% extends "base.html" %}
+
+{% load static %}
+{% block statics %}
+<style type="text/css">
+    div.search{
+        padding-left: 10px;
+        padding-top: 10px;
+        width: 50%;
+    }
+    tr.search td {
+        padding: 3px;
+    }
+    .pagination {
+        padding-right: 2%;
+        float: right;
+    }
+</style>
+<script type="text/javascript">
+    $(document).ready(function(){
+        $("#do_search").click(function(){
+                $("#search_form").submit();
+            });
+        $("#message").slideUp(3000);
+    });
+</script>
+{% endblock %}
+
+{% block content %}
+{% if message %}<div id="message"><p style="padding-left: 50%;"><strong>{{ message }}</strong></p></div>{% endif%}
+<div class="search">
+    <form id="search_form" action="{% url 'testplan:search' %}" method="post">
+        {% csrf_token %}
+        <!--input name="project" type="text" placeholder="项目名称"-->
+        <!--改用select-->
+        <div>
+            <table style="width: 100%;">
+                <tbody>
+                    <tr class="search">
+                        <td >
+                            <select id="project_list" name="project" style="height: 30px; width: 90%;">
+                                {% if project_list %}
+                                    {% for project in project_list %}
+                                    {% if selected_id %}
+                                        {% if  project.id|stringformat:"s" == selected_id|stringformat:"s" %}
+                                            <option value="{{project.id}}" selected="selected">{{project.project}}</option>
+                                        {% else %}
+                                            <option value="{{project.id}}">{{project.project}}</option>
+                                        {% endif %}
+                                    {% else %}
+                                        <option value="{{project.id}}">{{project.project}}</option>
+                                    {% endif %}
+                                    {% endfor %}
+                                {% endif %}
+                            </select>
+                        </td>
+                        <td><button id="do_search"  class="btn1">查询</button></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </form>
+</div>
+<div class="testplan_list">
+    <h3 class="testplan" style="display: inline-block">任 务 列 表</h3>
+    <button class="btn1" id="new_testplan" style="position: relative; left:80%">
+        <a href=" {% url 'testplan:new' %}">新建任务</a>
+    </button>
+        <table id="list">
+            <thead>
+                <tr>
+                    <th>任务编号</th>
+                    <th>任务名称</th>
+                    <th>创建人</th>
+                    <th>执行状态</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+    {% if testplan_list %}
+            <tbody>
+                {% for testplan in testplan_list %}
+                    {% if forloop.counter|divisibleby:"2" %}
+                    <tr class="even">
+                    {% else %}
+                    <tr>
+                    {% endif %}
+                    <td>{{testplan.no}}</td>
+                    <td>{{testplan.name}}</td>
+                    <td>{{testplan.charge}}</td>
+                    <td>{{testplan.status}}</td>
+                    <td>
+                        <button><a href="">运行</a></button>
+                        <button><a href="{% url 'testplan:detail' testplan.project_id testplan.id %}">查看</a></button>
+                        <button><a href="{% url 'testplan:modify' testplan.id %}">修改</a></button>
+                        <button><a href="{% url 'testplan:delete' testplan.id %}">删除</a></button>
+                        <button><a href="">结果</a></button>
+                    </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    <div class="pagination">
+        {% if testplan_list.has_previous %}
+            <button class="page_btn"><a href="./{{testplan_list.previous_page_number}}">上一页</a></button>
+        {% endif %}
+        <span class="current">Page {{testplan_list.number}} of {{testplan_list.paginator.num_pages}}</span>
+        {% if testplan_list.has_next %}
+            <button class="page_btn"><a href="./{{testplan_list.next_page_number}}">下一页</a></button>
+        {% endif %}
+    </div>
+    {% endif %}
+</div>
+
+{% endblock %}

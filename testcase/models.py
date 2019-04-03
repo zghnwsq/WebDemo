@@ -14,7 +14,7 @@ class TestCase(models.Model):
     path = models.CharField(max_length=72, null=True, blank=True)
     sheet = models.CharField(max_length=32, null=True, blank=True)
     ds = models.ForeignKey(Datasource, on_delete=models.SET('Null'), null=True, blank=True)
-    update_time = models.DateTimeField(auto_now_add=True)
+    update_time = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return self.case

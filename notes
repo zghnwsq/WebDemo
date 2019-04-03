@@ -54,19 +54,19 @@ get_list_or_404()
 
 #用例管理模型设计
 用例 TestCase
-用例no 用例名 所属项目(F) 创建人 用例文件路径 sheet名 数据源(F)
+用例no 用例名 所属项目(F) 创建人(F) 用例文件路径 sheet名 数据源(F 冗余)
 
 数据源 DataSource
-数据源no 数据源名 所属项目(F) 创建人 数据源文件路径 sheet名 数据源个数  更新时间
+数据源no 数据源名 所属项目(F) 创建人(F) 数据源文件路径 sheet名 数据源个数  更新时间
 
 任务管理(任务与用例一对多) TestPlan
-任务名 创建人 用例id(F) 数据源id(F) 执行机ip 数据源范围 执行状态 更新时间
+任务no 任务名 所属项目(F) 创建人(F) 用例id(F) 数据源id(F) 执行机ip 数据源执行范围 执行状态 更新时间
 
-任务执行历史 TestPlan_run_his
+任务执行历史 TP_Run_His
 执行id 任务id(F) 用例id(F)  执行开始时间 执行结束时间 执行结果 日志path 更新时间
 
-任务执行详情 TestPlan_run_detail
-执行id(F)  数据源序号  执行开始时间 执行结束时间  执行结果 更新时间
+任务执行详情 TP_Run_Detail
+执行id(F)  数据源序号  执行开始时间(varchar) 执行结束时间(varchar)  执行结果 更新时间
 
 
 #项目管理模型设计
@@ -111,7 +111,7 @@ case[Suit, TestCase, Action, P1, P2, P3, Result, Detail]
 无	无	如果不是最后一行	endRow=当前
 		如果是最后一行  	endRow=当前，存储用例
 
-# testcase.modify POST请求的处理
+
 
 
 
