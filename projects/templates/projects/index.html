@@ -17,6 +17,15 @@
         float: right;
     }
 </style>
+<script type="text/javascript">
+    $(document).ready(function(){
+    $("#go").click(function(){
+            var pg = $("#pg").val();
+            var go = './' + pg
+            window.location.assign(go)
+        });
+    });
+</script>
 {% endblock %}
 
 {% block content %}
@@ -58,6 +67,8 @@
         {% if project_list.has_next %}
             <button class="page_btn"><a href="./{{project_list.next_page_number}}">下一页</a></button>
         {% endif %}
+        <input id="pg" type="text" style="width: 1.5em;">
+        <button id="go">GO</button>
     </div>
 {% else %}
     <p>No Project available</p>

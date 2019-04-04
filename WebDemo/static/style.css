@@ -1,10 +1,18 @@
-body {font-family: Microsoft Yahei}
+body {font-family: Microsoft Yahei;}
 div#head {height: 70px; width: 100%; background: #0077c9}
 div#head table{height: 100%; float:right}
 div#head div{height: 100%; color: #eeeeee; float:left; padding-left:5%}
 div#head table td {padding: 10px;text-align: center; vertical-align: middle; color:white}
-div#left {height: 1024px; width: 15%; float: left; background: #368bde}
-div#content {height: 1024px; width: 85%; float: right;}
+div#left {
+    height: 1280px;
+    width: 15%;
+    background: #368bde;
+    float: left;
+    }
+div#content {height: 1280px;
+    width: 85%;
+    float: right;
+    }
 #menu {margin:0 auto; text-align: center; }
 
 .button div{background: #2e76bd;

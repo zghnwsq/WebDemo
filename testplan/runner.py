@@ -1,10 +1,12 @@
 # coding:utf8
-import os, time
+import os
 from django.conf import settings
 from .models import *
 from TestCore.Main import *
-from datasource.models import *
-from testcase.models import *
+from django.utils import timezone
+# from datasource.models import *
+# from testcase.models import *
+
 
 def runcase(testplan_id, case, case_path, case_sheet, ds_path=None, ds_sheet=None, ds_range=None):
     testplan = TestPlan.objects.get(id=testplan_id)
@@ -15,26 +17,52 @@ def runcase(testplan_id, case, case_path, case_sheet, ds_path=None, ds_sheet=Non
     if not os.path.isdir(project_log_base):
         os.mkdir(project_log_base)
     log_time_stamp = time.strftime("%Y%m%d_%H%M%S", time.localtime())
-    log_name = str(testplan.project_id)+ '_' + str(testplan.id) + '_' + log_time_stamp + '.txt'
+    log_name = str(testplan.project_id) + '_' + str(testplan.id) + '_' + log_time_stamp + '.txt'
     log_path = os.path.join(project_log_base, log_name)
+    # win mac路径兼容
+    if not os.path.isfile(case_path):
+        if os.path.isfile(case_path.replace('\\', '/')):
+            case_path = case_path.replace('\\', '/')
+        elif os.path.isfile(case_path.replace('/', '\\')):
+            case_path = case_path.replace('/', '\\')
+        else:
+            testplan.status = '用例错误'
+            testplan.save()
+            return
+    if ds_path:
+        if not os.path.isfile(ds_path):
+            if os.path.isfile(ds_path.replace('\\', '/')):
+                ds_path = ds_path.replace('\\', '/')
+            elif os.path.isfile(ds_path.replace('/', '\\')):
+                ds_path = ds_path.replace('/', '\\')
+            else:
+                testplan.status = '数据源错误'
+                testplan.save()
+                return
     thd = MainThread(log_path,
                      case_path,
                      case_sheet,
                      ds_path=ds_path,
                      ds_sheet=ds_sheet,
                      rg=ds_range)
-    beg_time = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
-    thd.start()
-    thd.join()
-    res = thd.get_res()
-    end_time = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
+    beg_time = timezone.now()  # time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
+    try:
+        thd.start()
+        thd.join()
+        res = thd.get_res()
+    except Exception as e:
+        testplan.status = '错误'
+        testplan.save()
+        print(e.__str__())
+        return
+    end_time = timezone.now()  # time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
     lg_path = os.path.join(str(testplan.project_id), log_name)
     his = TP_Run_His(
         testplan=testplan,
         case=case,
         beg_time=beg_time,
         end_time=end_time,
-        log_path= lg_path
+        log_path=lg_path
     )
     his.save()
     result = 'PASS'

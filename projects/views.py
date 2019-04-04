@@ -21,7 +21,7 @@ class IndexView(LoginRequiredMixin, generic.ListView):
 
     def get_queryset(self, **kwargs):
         user_projects = ProjectsUser.objects.filter(user_id=self.request.user.id).values('project_id')
-        projects = Projects.objects.filter(id__in=user_projects)
+        projects = Projects.objects.filter(id__in=user_projects).order_by('id')
         paginator = Paginator(projects, 10)
         # page = self.request.GET.get('page')
         page = self.kwargs['page']

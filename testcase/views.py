@@ -79,7 +79,7 @@ def search_result(request, selected, page):
                'project_list': project_list,
                'selected_id': selected
                }
-    case_list = TestCase.objects.filter(project=selected)
+    case_list = TestCase.objects.filter(project=selected).order_by('id')
     paginator = Paginator(case_list, 10)
     try:
         cases = paginator.page(page)

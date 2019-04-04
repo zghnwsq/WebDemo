@@ -76,7 +76,7 @@ def search_result(request, selected, page):
                'project_list': project_list,
                'selected_id': selected
                }
-    datasource_list = Datasource.objects.filter(project=selected)
+    datasource_list = Datasource.objects.filter(project=selected).order_by('id')
     paginator = Paginator(datasource_list, 10)
     try:
         datasource = paginator.page(page)

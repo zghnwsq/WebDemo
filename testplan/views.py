@@ -77,7 +77,7 @@ def search_result(request, selected, page):
                'project_list': project_list,
                'selected_id': selected
                }
-    testplan_list = TestPlan.objects.filter(project=selected)
+    testplan_list = TestPlan.objects.filter(project=selected).order_by('id')
     # print(testplan_list)
     paginator = Paginator(testplan_list, 10)
     try:
@@ -231,6 +231,8 @@ class NewView(LoginRequiredMixin, generic.FormView):
             context['message'] = form.errors
             return render(request, 'testplan/new.html', context)
 
+
+@login_required
 def choice(request, project_id):
     case_set = TestCase.objects.filter(project_id=project_id)
     case_list = []
@@ -391,18 +393,23 @@ class LogView(LoginRequiredMixin, generic.ListView):
         path = his.log_path
         base = os.path.join(settings.MEDIA_ROOT, 'log')
         log_path = os.path.join(base, path)
+        print(log_path)
         log_html = []
         if os.path.isdir(base):
             if os.path.isfile(log_path):
-                print(log_path)
-                log = open(log_path, encoding='utf8')
-                if log:
-                    lines = log.readlines()
-                    for line in lines:
-                        log_html.append(line)
-                    return log_html
-                else:
-                    return log_html
+                pass
+            elif os.path.isfile(log_path.replace('\\', '/')):
+                log_path = log_path.replace('\\', '/')
+            elif os.path.isfile(log_path.replace('/', '\\')):
+                log_path = log_path.replace('/', '\\')
+            else:
+                return log_html
+            log = open(log_path, encoding='utf8')
+            if log:
+                lines = log.readlines()
+                for line in lines:
+                    log_html.append(line)
+                return log_html
             else:
                 return log_html
         else:
