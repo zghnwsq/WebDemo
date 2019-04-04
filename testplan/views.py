@@ -1,4 +1,4 @@
-import os
+import os, time
 from django.conf import settings
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
@@ -10,11 +10,14 @@ from login.models import Menu, RoleMenu
 from projects.models import ProjectsUser, Projects
 from .models import TestCase
 from datasource.models import Datasource
+from django.http import JsonResponse
 from .models import *
 from .form import *
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.http import HttpResponseRedirect
 from django.urls import reverse
+# from TestCore.Main import *
+from .runner import runcase
 # Create your views here.
 
 class IndexView(LoginRequiredMixin, generic.ListView):
@@ -75,7 +78,7 @@ def search_result(request, selected, page):
                'selected_id': selected
                }
     testplan_list = TestPlan.objects.filter(project=selected)
-    print(testplan_list)
+    # print(testplan_list)
     paginator = Paginator(testplan_list, 10)
     try:
         testplan = paginator.page(page)
@@ -123,13 +126,23 @@ class ModifyView(LoginRequiredMixin, generic.FormView):
     def post(self, request, testplan_id, *args, **kwargs):
         form = ModifyForm(request.POST)
         if form.is_valid():
-            testplan = TestCase.objects.get(id=testplan_id)
+            testplan = TestPlan.objects.get(id=testplan_id)
             no = request.POST['no']
             if no:
                 testplan.no = no
             name = request.POST['name']
             if name:
                 testplan.name = name
+            cs = request.POST['testcase']
+            if cs:
+                case = TestCase.objects.get(id=cs)
+                # print(case)
+                testplan.case = case
+            ds = request.POST['datasource']
+            if ds:
+                datasource = Datasource.objects.get(id=ds)
+                # print(datasource)
+                testplan.ds = datasource
             ip = request.POST['ip']
             if ip:
                 testplan.ip = ip
@@ -137,7 +150,7 @@ class ModifyView(LoginRequiredMixin, generic.FormView):
             if ds_range:
                 testplan.ds_range = ds_range
             # 没有修改
-            elif not no and not name and not ip and not ds_range:
+            elif not no and not name and not ip and not ds_range and not case and not datasource:
                 context = self.get_data(request, testplan_id)
                 context['message'] = 'Nothing changed!'
                 return render(request, 'testplan/modify.html', context)
@@ -168,10 +181,10 @@ class NewView(LoginRequiredMixin, generic.FormView):
         user_projects = ProjectsUser.objects.filter(user_id=self.request.user.id).values('project_id')
         projects = Projects.objects.filter(id__in=user_projects).filter(status='1')
         context['projects'] = projects
-        case_list = TestCase.objects.filter(project_id__in=projects)
-        context['case_list'] = case_list
-        datasource_list = Datasource.objects.filter(project_id__in=projects)
-        context['datasource_list'] = datasource_list
+        # case_list = TestCase.objects.filter(project_id__in=projects)
+        # context['case_list'] = case_list
+        # datasource_list = Datasource.objects.filter(project_id__in=projects)
+        # context['datasource_list'] = datasource_list
         return context
 
     def get(self, request):
@@ -217,6 +230,18 @@ class NewView(LoginRequiredMixin, generic.FormView):
             context = self.get_data(request)
             context['message'] = form.errors
             return render(request, 'testplan/new.html', context)
+
+def choice(request, project_id):
+    case_set = TestCase.objects.filter(project_id=project_id)
+    case_list = []
+    for case in case_set:
+        case_list.append({'id': str(case.id), 'name': case.case})
+    ds_set = Datasource.objects.filter(project_id=project_id)
+    datasource_list = []
+    for ds in ds_set:
+        datasource_list.append({'id': str(ds.id), 'name': ds.name})
+    ret = {'case_list': case_list, 'datasource_list': datasource_list}
+    return JsonResponse(ret)
 
 
 @login_required
@@ -277,10 +302,125 @@ class DetailView(LoginRequiredMixin, generic.ListView):
         project = Projects.objects.get(id=testplan.project_id)
         context['project'] = project
         case = TestCase.objects.get(id=testplan.case_id)
-        context['case'] = case
+        context['case'] = case or ''
         ds = Datasource.objects.get(id=testplan.ds_id)
-        context['ds'] = ds
+        context['ds'] = ds or ''
         return context
 
+
+@login_required
+def run(request, testplan_id):
+    testplan = TestPlan.objects.get(id=testplan_id)
+    # 状态为空或者不为执行中
+    if not testplan.status or testplan.status.find('执行中') == -1:
+        stat = '1'
+    else:
+        stat = ''
+    if testplan.case and testplan.ip and stat and TestCase.objects.get(id=testplan.case_id).path:
+        case = TestCase.objects.get(id=testplan.case_id)
+        ds = Datasource.objects.get(id=testplan.ds_id)
+        ip = testplan.ip
+        c_base = os.path.join(settings.MEDIA_ROOT, 'cases')
+        case_path = os.path.join(c_base, case.path)
+        case_sheet = case.sheet
+        ds_range = testplan.ds_range or None
+        ds_base = os.path.join(settings.MEDIA_ROOT, 'datasource')
+        ds_path = os.path.join(ds_base, ds.path or '')
+        ds_sheet = ds.sheet or None
+        testplan.status = '执行中'
+        testplan.save()
+        runcase(testplan_id, case, case_path, case_sheet, ds_path=ds_path, ds_sheet=ds_sheet, ds_range=ds_range)
+        return HttpResponseRedirect(reverse('testplan:search_result', args=[testplan.project_id, 1]))
+    else:
+        user_projects = ProjectsUser.objects.filter(user_id=request.user.id).values('project_id')
+        project_list =  Projects.objects.filter(id__in=user_projects).filter(status='1')
+        user_group = request.session['user_group']
+        rmenu = RoleMenu.objects.filter(role_name=user_group).values('menu')
+        menu = Menu.objects.filter(menu_text__in=rmenu).order_by('order')
+        context = {
+            'menu': menu,
+            'user_group': request.session['user_group'],
+            'user_name': request.session['user_name'],
+            'project_list': project_list,
+            'error': '用例执行中 或者 未配置用例或ip 或 未导入用例!'
+        }
+        return render(request, 'testplan/testplan.html', context)
+
+
+@login_required
+def result(request, testplan_id):
+    return HttpResponseRedirect(reverse('testplan:result_list', args=[testplan_id, 1]))
+
+
+@login_required
+def result_list(request, testplan_id, page):
+    testplan = TestPlan.objects.get(id=testplan_id)
+    project = Projects.objects.get(id=testplan.project_id)
+    user_name = request.session['user_name']
+    user_group = request.session['user_group']
+    rmenu = RoleMenu.objects.filter(role_name=user_group).values('menu')
+    menu = Menu.objects.filter(menu_text__in=rmenu).order_by('order')
+    context = {'menu': menu,
+               'user_group': user_group,
+               'user_name': user_name,
+               'project': project,
+               }
+
+    his_list = TP_Run_His.objects.filter(testplan_id=testplan_id).order_by('-update_time')
+    paginator = Paginator(his_list, 10)
+    try:
+        his_list = paginator.page(page)
+    except PageNotAnInteger:
+        his_list = paginator.page(1)
+    except EmptyPage:
+        his_list = paginator.page(paginator.num_pages)
+    if his_list:
+        context['his_list'] = his_list
+        return render(request, 'testplan/result.html', context)
+    else:
+        return render(request, 'testplan/result.html', context)
+
+
+class LogView(LoginRequiredMixin, generic.ListView):
+    template_name = 'testplan/log.html'
+    context_object_name = 'log'
+
+    def get_queryset(self, **kwargs):
+        his_id = self.kwargs['his_id']
+        his = TP_Run_His.objects.get(id=his_id)
+        path = his.log_path
+        base = os.path.join(settings.MEDIA_ROOT, 'log')
+        log_path = os.path.join(base, path)
+        log_html = []
+        if os.path.isdir(base):
+            if os.path.isfile(log_path):
+                print(log_path)
+                log = open(log_path, encoding='utf8')
+                if log:
+                    lines = log.readlines()
+                    for line in lines:
+                        log_html.append(line)
+                    return log_html
+                else:
+                    return log_html
+            else:
+                return log_html
+        else:
+            return log_html
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        request = self.request
+        user_group = request.session['user_group']
+        rmenu = RoleMenu.objects.filter(role_name=user_group).values('menu')
+        menu = Menu.objects.filter(menu_text__in=rmenu).order_by('order')
+        his_id = self.kwargs['his_id']
+        his = TP_Run_His.objects.get(id=his_id)
+        testplan = TestPlan.objects.get(id=his.testplan_id)
+        context['menu'] = menu
+        context['user_group'] = request.session['user_group']
+        context['user_name'] = request.session['user_name']
+        context['testplan'] = testplan
+        return context
 
 

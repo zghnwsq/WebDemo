@@ -134,6 +134,9 @@ class ModifyView(LoginRequiredMixin, generic.FormView):
             # if project:
             #     testcase.project = Projects.objects.get(id=project)
             # print(request.FILES['file'].name)
+            sheet = request.POST['sheet']
+            if sheet:
+                testcase.sheet = sheet
             if 'file' in request.FILES.keys():
                 if request.FILES['file'].name.find('.xls') == -1:
                     context = self.get_data(request, case_id)
@@ -141,15 +144,12 @@ class ModifyView(LoginRequiredMixin, generic.FormView):
                     return render(request, 'testcase/modify.html', context)
                 file_path = handle_uploaded_case(request.FILES['file'], testcase.project_id, case_id)
                 testcase.path = file_path
-                sheet = request.POST['sheet']
-                if sheet:
-                    testcase.sheet = sheet
-                else:
+                if not sheet:
                     context = self.get_data(request, case_id)
                     context['message'] = 'Empty sheet name!'
                     return render(request, 'testcase/modify.html', context)
             # 没有修改
-            elif not no and not case and 'file' not in request.FILES.keys():
+            elif not no and not case and not sheet and 'file' not in request.FILES.keys():
                 context = self.get_data(request, case_id)
                 context['message'] = 'Nothing changed!'
                 return render(request, 'testcase/modify.html', context)

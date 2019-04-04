@@ -1,0 +1,46 @@
+ Thu, 04 Apr 2019 17:22:30 - INFO: =========Case Start, Scene:1=========
+ Thu, 04 Apr 2019 17:22:30 - INFO: Step: http_set, , , 
+ Thu, 04 Apr 2019 17:22:30 - INFO: New Http Object Set
+ Thu, 04 Apr 2019 17:22:30 - INFO: Message: 
+ Thu, 04 Apr 2019 17:22:30 - INFO: Step: http_post, http://www.testingedu.com.cn/inter/HTTP/auth, , 
+ Thu, 04 Apr 2019 17:22:30 - INFO: Sent POST request:|http://www.testingedu.com.cn/inter/HTTP/auth|---Success!
+ Thu, 04 Apr 2019 17:22:30 - INFO: Response:--->|{"status":200,"msg":"success","token":"6494d831527d40f2b8b25c00b891f84a"}|<---
+ Thu, 04 Apr 2019 17:22:30 - INFO: Step: http_get_res_by_json_path, $.token, token, 
+ Thu, 04 Apr 2019 17:22:30 - INFO: Try to get value: |$.token:6494d831527d40f2b8b25c00b891f84a|---Success!
+ Thu, 04 Apr 2019 17:22:30 - INFO: Step: http_add_headers, token, 6494d831527d40f2b8b25c00b891f84a, 
+ Thu, 04 Apr 2019 17:22:30 - INFO: Try to add headers: |token 6494d831527d40f2b8b25c00b891f84a|---Success
+ Thu, 04 Apr 2019 17:22:30 - INFO: Step: http_assert_res_by_json_path, $.status, 200, 
+ Thu, 04 Apr 2019 17:22:30 - INFO: Assert json : |$.status:200|---Success!
+ Thu, 04 Apr 2019 17:22:30 - INFO: Step: http_assert_res_contain, success, , 
+ Thu, 04 Apr 2019 17:22:30 - INFO: Assert res contain : |success|---Success!
+ Thu, 04 Apr 2019 17:22:30 - INFO: Step: http_post, http://www.testingedu.com.cn/inter/HTTP/login?username=&password=123456, , 
+ Thu, 04 Apr 2019 17:22:30 - INFO: Sent POST request:|http://www.testingedu.com.cn/inter/HTTP/login?username=&password=123456|---Success!
+ Thu, 04 Apr 2019 17:22:30 - INFO: Response:--->|{"status":402,"msg":"参数错误"}|<---
+ Thu, 04 Apr 2019 17:22:30 - INFO: Step: http_assert_res_by_json_path, $.status, 402, 
+ Thu, 04 Apr 2019 17:22:30 - INFO: Assert json : |$.status:402|---Success!
+ Thu, 04 Apr 2019 17:22:30 - INFO: Step: http_assert_res_by_json_path, $.msg, 参数错误, 
+ Thu, 04 Apr 2019 17:22:30 - INFO: Assert json : |$.msg:参数错误|---Success!
+ Thu, 04 Apr 2019 17:22:30 - INFO: =========Case End, Scene:1 PASS=========
+ Thu, 04 Apr 2019 17:22:32 - INFO: =========Case Start, Scene:1=========
+ Thu, 04 Apr 2019 17:22:32 - INFO: Step: http_set, , , 
+ Thu, 04 Apr 2019 17:22:32 - INFO: New Http Object Set
+ Thu, 04 Apr 2019 17:22:32 - INFO: Message: 
+ Thu, 04 Apr 2019 17:22:32 - INFO: Step: http_post, http://www.testingedu.com.cn/inter/HTTP/auth, , 
+ Thu, 04 Apr 2019 17:22:32 - INFO: Sent POST request:|http://www.testingedu.com.cn/inter/HTTP/auth|---Success!
+ Thu, 04 Apr 2019 17:22:32 - INFO: Response:--->|{"status":200,"msg":"success","token":"124bc32436214b6088d0a3ba9d2ec5fd"}|<---
+ Thu, 04 Apr 2019 17:22:32 - INFO: Step: http_get_res_by_json_path, $.token, token, 
+ Thu, 04 Apr 2019 17:22:32 - INFO: Try to get value: |$.token:124bc32436214b6088d0a3ba9d2ec5fd|---Success!
+ Thu, 04 Apr 2019 17:22:32 - INFO: Step: http_add_headers, token, 124bc32436214b6088d0a3ba9d2ec5fd, 
+ Thu, 04 Apr 2019 17:22:32 - INFO: Try to add headers: |token 124bc32436214b6088d0a3ba9d2ec5fd|---Success
+ Thu, 04 Apr 2019 17:22:32 - INFO: Step: http_assert_res_by_json_path, $.status, 200, 
+ Thu, 04 Apr 2019 17:22:32 - INFO: Assert json : |$.status:200|---Success!
+ Thu, 04 Apr 2019 17:22:32 - INFO: Step: http_assert_res_contain, success, , 
+ Thu, 04 Apr 2019 17:22:32 - INFO: Assert res contain : |success|---Success!
+ Thu, 04 Apr 2019 17:22:32 - INFO: Step: http_post, http://www.testingedu.com.cn/inter/HTTP/login?username=&password=123456, , 
+ Thu, 04 Apr 2019 17:22:32 - INFO: Sent POST request:|http://www.testingedu.com.cn/inter/HTTP/login?username=&password=123456|---Success!
+ Thu, 04 Apr 2019 17:22:32 - INFO: Response:--->|{"status":402,"msg":"参数错误"}|<---
+ Thu, 04 Apr 2019 17:22:32 - INFO: Step: http_assert_res_by_json_path, $.status, 402, 
+ Thu, 04 Apr 2019 17:22:32 - INFO: Assert json : |$.status:402|---Success!
+ Thu, 04 Apr 2019 17:22:32 - INFO: Step: http_assert_res_by_json_path, $.msg, 参数错误, 
+ Thu, 04 Apr 2019 17:22:32 - INFO: Assert json : |$.msg:参数错误|---Success!
+ Thu, 04 Apr 2019 17:22:32 - INFO: =========Case End, Scene:1 PASS=========

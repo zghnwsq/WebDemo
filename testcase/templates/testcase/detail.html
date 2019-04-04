@@ -24,8 +24,10 @@
 </style>
 <script type="text/javascript">
     $(document).ready(function(){
-
     });
+    function to(url){
+        window.location.assign(url)
+    }
 </script>
 {% endblock %}
 
@@ -37,13 +39,13 @@
     <span><b>Testcase No: {{testcase.no}}</b></span>
     <span><b>Testcase Name: {{testcase.case}}</b></span>
 </div>
-<button class="btn1" id="back" style="float:right;">
+<div class="btn1" id="back" style="float:right; margin: 10px;">
     {% if project_id %}
-    <a href=" {% url 'testcase:search_result' project_id 1 %}">返回</a>
+    <button onclick="to('{% url 'testcase:search_result' project_id 1 %}')">返回</button>
     {% else %}
-    <button><a href="{% url 'testcase:testcase'%}">返回</a></button>
+    <button onclick="to('{% url 'testcase:testcase'%}')">返回</button>
     {% endif %}
-</button>
+</div>
 {% endif %}
 {% if message %}<div>{{message}}</div>{% endif %}
 {% if case %}

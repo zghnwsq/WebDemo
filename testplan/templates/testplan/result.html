@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+
+{% load static %}
+{% block statics %}
+<style type="text/css">
+    .pagination {
+        padding-right: 2%;
+        float: right;
+    }
+</style>
+<script type="text/javascript">
+    $(document).ready(function(){
+        $("#message").slideUp(5000);
+        $("#error").slideUp(5000);
+
+        $("#go").click(function(){
+            var pg = $("#pg").val();
+            var go = './' + pg
+            window.location.assign(go)
+        });
+    });
+    function to(url){
+        window.location.assign(url)
+    }
+</script>
+{% endblock %}
+
+{% block content %}
+{% if message %}<div id="message"><p style="padding-left:40%;"><strong>{{ message }}</strong></p></div>{% endif%}
+{% if error %}<div id="error"><p style="padding-left: 40%;"><strong>{{ error }}</strong></p></div>{% endif%}
+<div class="result_list">
+    <h3 class="result" style="display: inline-block">执 行 历 史</h3>
+    <div class="btn1" id="back" style="position: relative; left:90%; margin: 10px">
+        {% if project %}
+        <button onclick="to('{% url 'testplan:search_result' project.id 1 %}')">返回</button>
+        {% else %}
+        <button onclick="to('{% url 'testplan:testplan'%}')">返回</button>
+        {% endif %}
+    </div>
+        <table id="list">
+            <thead>
+                <tr>
+                    <th>用例</th>
+                    <th>开始时间</th>
+                    <th>结束时间</th>
+                    <th>执行结果</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+    {% if his_list %}
+            <tbody>
+                {% for his in his_list %}
+                    {% if forloop.counter|divisibleby:"2" %}
+                    <tr class="even">
+                    {% else %}
+                    <tr>
+                    {% endif %}
+                    <td>{{his.testplan}}</td>
+                    <td>{{his.beg_time}}</td>
+                    <td>{{his.end_time}}</td>
+                    <td>{{his.result}}</td>
+                    <td>
+                        <button onclick="to('{% url 'testplan:log' his.testplan_id his.id %}')">日志</button>
+                    </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    <div class="pagination">
+        {% if his_list.has_previous %}
+            <button class="page_btn" onclick="to('./{{his_list.previous_page_number}}')">上一页</button>
+        {% endif %}
+        <span class="current">Page {{his_list.number}} of {{his_list.paginator.num_pages}}</span>
+        {% if his_list.has_next %}
+            <button class="page_btn" onclick="to('./{{his_list.next_page_number}}')">下一页</button>
+        {% endif %}
+        <input id="pg" type="text" style="width: 1.5em;">
+        <button id="go">GO</button>
+    </div>
+    {% endif %}
+</div>
+
+{% endblock %}

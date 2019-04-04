@@ -8,6 +8,11 @@
         left: 30%;
         padding-top: 10px;
     }
+    #button {
+        position: relative;
+        left: 30%;
+        padding-top: 10px;
+    }
     #detail div{
         padding: 10px;
     }
@@ -17,8 +22,10 @@
 </style>
 <script type="text/javascript">
     $(document).ready(function(){
-
     });
+    function to(url){
+        window.location.assign(url)
+    }
 </script>
 {% endblock %}
 
@@ -66,14 +73,13 @@
         <span>数据源执行范围:</span>
         <input type="text" name="ds_range" placeholder="{{testplan.ds_range}}" disabled="disabled">
     </div>
+</form>
     <!--button-->
-    <div>
+    <div id="button">
         {% if testplan %}
-        <button><a href="{% url 'testplan:search_result' testplan.project_id 1 %}">返回</a></button>
+        <button onclick="to('{% url 'testplan:search_result' testplan.project_id 1 %}')">返回</button>
         {% else %}
-        <button><a href="{% url 'testplan:testplan'%}">返回</a></button>
+        <button onclick="to('{% url 'testplan:testplan'%}')">返回</button>
         {% endif %}
     </div>
-</form>
-
 {% endblock %}

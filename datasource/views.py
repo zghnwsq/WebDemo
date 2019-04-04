@@ -124,9 +124,12 @@ class ModifyView(LoginRequiredMixin, generic.FormView):
             no = request.POST['no']
             if no:
                 datasource.no = no
-                datasource = request.POST['datasource']
-            if datasource:
-                datasource.datasource = datasource
+            name = request.POST['datasource']
+            if name:
+                datasource.name = name
+            sheet = request.POST['sheet']
+            if sheet:
+                datasource.sheet = sheet
             if 'file' in request.FILES.keys():
                 if request.FILES['file'].name.find('.xls') == -1:
                     context = self.get_data(request, datasource_id)
@@ -135,9 +138,7 @@ class ModifyView(LoginRequiredMixin, generic.FormView):
                 file_path = handle_uploaded_case(request.FILES['file'], datasource.project_id, datasource_id)
                 datasource.path = file_path
                 sheet = request.POST['sheet']
-                if sheet:
-                    datasource.sheet = sheet
-                else:
+                if not sheet:
                     context = self.get_data(request, datasource_id)
                     context['message'] = 'Empty sheet name!'
                     return render(request, 'datasource/modify.html', context)
@@ -145,7 +146,7 @@ class ModifyView(LoginRequiredMixin, generic.FormView):
                 excel = Excel.read_sheet(os.path.join(base, file_path), sheet)
                 datasource.length = len(excel[0])-1
             # 没有修改
-            elif not no and not datasource and 'file' not in request.FILES.keys():
+            elif not no and not datasource and not sheet and 'file' not in request.FILES.keys():
                 context = self.get_data(request, datasource_id)
                 context['message'] = 'Nothing changed!'
                 return render(request, 'datasource/modify.html', context)

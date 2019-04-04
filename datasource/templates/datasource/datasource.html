@@ -22,7 +22,16 @@
                 $("#search_form").submit();
             });
         $("#message").slideUp(3000);
+
+        $("#go").click(function(){
+            var pg = $("#pg").val();
+            var go = './' + pg
+            window.location.assign(go)
+        });
     });
+    function to(url){
+        window.location.assign(url)
+    }
 </script>
 {% endblock %}
 
@@ -64,9 +73,9 @@
 </div>
 <div class="case_list">
     <h3 class="projects" style="display: inline-block">数 据 源 列 表</h3>
-    <button class="btn1" id="new_case" style="position: relative; left:80%">
-        <a href=" {% url 'datasource:new' %}">新增数据源</a>
-    </button>
+    <div class="btn1" id="new_case" style="position: relative; left:88%; margin:10px;">
+        <button onclick="to('{% url 'datasource:new' %}')">新增数据源</button>
+    </div>
         <table id="list">
             <thead>
                 <tr>
@@ -88,9 +97,9 @@
                     <td>{{datasource.name}}</td>
                     <td>{{datasource.charge}}</td>
                     <td>
-                        <button><a href="{% url 'datasource:detail' datasource.project_id datasource.id %}">查看</a></button>
-                        <button><a href="{% url 'datasource:modify' datasource.id %}">修改</a></button>
-                        <button><a href="{% url 'datasource:delete' datasource.id %}">删除</a></button>
+                        <button onclick="to('{% url 'datasource:detail' datasource.project_id datasource.id %}')">查看</button>
+                        <button onclick="to('{% url 'datasource:modify' datasource.id %}')">修改</button>
+                        <button onclick="to('{% url 'datasource:delete' datasource.id %}')">删除</button>
                     </td>
                     </tr>
                 {% endfor %}
@@ -98,12 +107,14 @@
         </table>
     <div class="pagination">
         {% if datasource_list.has_previous %}
-            <button class="page_btn"><a href="./{{datasource_list.previous_page_number}}">上一页</a></button>
+            <button class="page_btn" onclick="to('./{{datasource_list.previous_page_number}}')">上一页</button>
         {% endif %}
         <span class="current">Page {{datasource_list.number}} of {{datasource_list.paginator.num_pages}}</span>
         {% if datasource_list.has_next %}
-            <button class="page_btn"><a href="./{{datasource_list.next_page_number}}">下一页</a></button>
+            <button class="page_btn" onclick="to('./{{datasource_list.next_page_number}}')">下一页</button>
         {% endif %}
+        <input id="pg" type="text" style="width: 1.5em;">
+        <button id="go">GO</button>
     </div>
     {% endif %}
 </div>

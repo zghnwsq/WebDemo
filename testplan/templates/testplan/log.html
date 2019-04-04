@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% load static %}
+{% block statics %}
+<style type="text/css">
+    .pagination {
+        padding-right: 2%;
+        float: right;
+    }
+    #log {
+        margin: 20px;
+        overflow-y:scroll;
+    }
+</style>
+<script type="text/javascript">
+    $(document).ready(function(){
+        $("#message").slideUp(5000);
+        $("#error").slideUp(5000);
+
+        $("#go").click(function(){
+            var pg = $("#pg").val();
+            var go = './' + pg
+            window.location.assign(go)
+        });
+    });
+    function to(url){
+        window.location.assign(url)
+    }
+</script>
+{% endblock %}
+
+{% block content %}
+{% if message %}<div id="message"><p style="padding-left:40%;"><strong>{{ message }}</strong></p></div>{% endif%}
+{% if error %}<div id="error"><p style="padding-left: 40%;"><strong>{{ error }}</strong></p></div>{% endif%}
+<div class="log_form">
+    <h3 class="log_text" style="display: inline-block">日 志</h3>
+    <div class="btn1" id="back" style="position: relative; left:90%; margin: 10px">
+        {% if testplan %}
+        <button onclick="to('{% url 'testplan:result_list' testplan.id 1 %}')">返回</button>
+        {% else %}
+        <button onclick="to('{% url 'testplan:testplan'%}')">返回</button>
+        {% endif %}
+    </div>
+    {% if log %}
+        <div id="log">
+            {% for line in log %}
+                <li>{{line}}</li>
+            {% endfor %}
+        </div>
+    {% endif %}
+</div>
+
+{% endblock %}

@@ -8,6 +8,11 @@
         left: 30%;
         padding-top: 10px;
     }
+    #button {
+        position: relative;
+        left: 30%;
+        padding-top: 10px;
+    }
     #new div{
         padding: 10px;
     }
@@ -18,9 +23,37 @@
 <script type="text/javascript">
     $(document).ready(function(){
         $("#submit").click(function(){
-                $("#modify").submit();
-            });
+                $("#new").submit();
+        });
+
+        $("#pj_select").change(function(){
+            var pj_id = $("#pj_select").val();
+            var addr = '/testplan/' + pj_id + '/choice';
+            $("#case_select").empty();
+            $("#datasource_select").empty();
+            $.getJSON(addr, function(ret){
+                var case_list = ret['case_list'];
+                for(var i = 0; i<case_list.length; i++){
+                    <!--console.log(case_list[i])-->
+                    var cs = case_list[i]
+                    var op = '<option value="' + cs['id'] + '">' + cs['name'] +'</option>'
+                    $("#case_select").append(op);
+                }
+                var datasource_list = ret['datasource_list'];
+                for(var i = 0; i<datasource_list.length; i++){
+                    var ds = datasource_list[i]
+                    var op = '<option value="' + ds['id'] + '">' + ds['name'] + '</option>'
+                    $("#datasource_select").append(op);
+                }
+            })
+        });
+
     });
+
+    function to(url){
+        window.location.assign(url)
+    }
+
 </script>
 {% endblock %}
 
@@ -43,6 +76,7 @@
     <div>
         <span>项目:</span>
         <select id="pj_select" name="project">
+            <option value="">------</option>
             {% if projects %}
                 {% for project in projects %}
                     <option value="{{project.id}}">id: {{project.id}} | name: {{project.project}}</option>
@@ -61,7 +95,6 @@
                 {% endfor %}
             {% endif %}
         </select>
-        <span style="font-size: small;"><i>(用例id需与项目id相同)</i></span>
     </div>
     <!--ds select-->
         <div>
@@ -69,11 +102,10 @@
         <select id="datasource_select" name="datasource">
             {% if datasource_list %}
                 {% for datasource in datasource_list %}
-                    <option value="{{datasource.id}}">id: {{datasource.project_id}} | name:{{datasource.name}}</option>
+                    <option value="{{datasource.id}}">id: {{datasource.project_id}} | name: {{datasource.name}}</option>
                 {% endfor %}
             {% endif %}
         </select>
-        <span style="font-size: small;"><i>(数据源id需与项目id相同)</i></span>
     </div>
     <!--ip-->
     <div>
@@ -85,15 +117,15 @@
         <span>数据源执行范围:</span>
         <input type="text" name="ds_range" placeholder="{{testplan.ds_range}}">
     </div>
+</form>
     <!--button-->
-    <div>
+    <div id="button">
         <button id="submit">保存</button>
         {% if testplan %}
-        <button><a href="{% url 'testplan:search_result' testplan.project_id 1 %}">返回</a></button>
+        <button onclick="to('{% url 'testplan:search_result' testplan.project_id 1 %}')">返回</button>
         {% else %}
-        <button><a href="{% url 'testplan:testplan'%}">返回</a></button>
+        <button onclick="to('{% url 'testplan:testplan'%}')">返回</button>
         {% endif %}
     </div>
-</form>
 
 {% endblock %}

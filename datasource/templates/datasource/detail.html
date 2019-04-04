@@ -26,6 +26,9 @@
     $(document).ready(function(){
 
     });
+    function to(url){
+        window.location.assign(url)
+    }
 </script>
 {% endblock %}
 
@@ -37,13 +40,13 @@
     <span><b>Datasource No: {{datasource.no}}</b></span>
     <span><b>Datasource Name: {{datasource.name}}</b></span>
 </div>
-<button class="btn1" id="back" style="float:right;">
+<div class="btn1" id="back" style="float:right; margin-right: 10px;">
     {% if project_id %}
-    <a href=" {% url 'datasource:search_result' project_id 1 %}">返回</a>
+    <button onclick="to('{% url 'datasource:search_result' project_id 1 %}')">返回</button>
     {% else %}
-    <button><a href="{% url 'datasource:datasource'%}">返回</a></button>
+    <button onclick="to('{% url 'datasource:datasource'%}')">返回</a></button>
     {% endif %}
-</button>
+</div>
 {% endif %}
 {% if message %}<div>{{message}}</div>{% endif %}
 {% if excel %}

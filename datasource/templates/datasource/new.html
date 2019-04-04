@@ -8,6 +8,11 @@
         left: 30%;
         padding-top: 10px;
     }
+    #button {
+        position: relative;
+        left: 30%;
+        padding-top: 10px;
+    }
     #new div{
         padding: 10px;
     }
@@ -21,6 +26,9 @@
                 $("#modify").submit();
             });
     });
+    function to(url){
+        window.location.assign(url)
+    }
 </script>
 {% endblock %}
 
@@ -60,14 +68,14 @@
         <span>sheet名:</span>
         <input type="text" name="sheet" placeholder="Datasource sheetname">
     </div>
-    <div>
+</form>
+    <div id="button">
         <button id="submit">保存</button>
         {% if testcase %}
-        <button><a href="{% url 'datasource:search_result' datasource.project_id 1 %}">返回</a></button>
+        <button onclick="to('{% url 'datasource:search_result' datasource.project_id 1 %}')">返回</button>
         {% else %}
-        <button><a href="{% url 'datasource:datasource'%}">返回</a></button>
+        <button onclick="to('{% url 'datasource:datasource'%}')">返回</button>
         {% endif %}
     </div>
-</form>
 
 {% endblock %}

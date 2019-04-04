@@ -21,13 +21,24 @@
         $("#do_search").click(function(){
                 $("#search_form").submit();
             });
-        $("#message").slideUp(3000);
+        $("#message").slideUp(5000);
+        $("#error").slideUp(5000);
+
+        $("#go").click(function(){
+            var pg = $("#pg").val();
+            var go = './' + pg
+            window.location.assign(go)
+        });
     });
+    function to(url){
+        window.location.assign(url)
+    }
 </script>
 {% endblock %}
 
 {% block content %}
-{% if message %}<div id="message"><p style="padding-left: 50%;"><strong>{{ message }}</strong></p></div>{% endif%}
+{% if message %}<div id="message"><p style="padding-left:40%;"><strong>{{ message }}</strong></p></div>{% endif%}
+{% if error %}<div id="error"><p style="padding-left: 40%;"><strong>{{ error }}</strong></p></div>{% endif%}
 <div class="search">
     <form id="search_form" action="{% url 'testplan:search' %}" method="post">
         {% csrf_token %}
@@ -64,9 +75,9 @@
 </div>
 <div class="testplan_list">
     <h3 class="testplan" style="display: inline-block">任 务 列 表</h3>
-    <button class="btn1" id="new_testplan" style="position: relative; left:80%">
-        <a href=" {% url 'testplan:new' %}">新建任务</a>
-    </button>
+    <div class="btn1" id="new_testplan" style="position: relative; left:88%; margin: 10px">
+        <button onclick="to('{% url 'testplan:new' %}')">新建任务</button>
+    </div>
         <table id="list">
             <thead>
                 <tr>
@@ -90,11 +101,11 @@
                     <td>{{testplan.charge}}</td>
                     <td>{{testplan.status}}</td>
                     <td>
-                        <button><a href="">运行</a></button>
-                        <button><a href="{% url 'testplan:detail' testplan.project_id testplan.id %}">查看</a></button>
-                        <button><a href="{% url 'testplan:modify' testplan.id %}">修改</a></button>
-                        <button><a href="{% url 'testplan:delete' testplan.id %}">删除</a></button>
-                        <button><a href="">结果</a></button>
+                        <button onclick="to('{% url 'testplan:run' testplan.id %}')">执行</button>
+                        <button onclick="to('{% url 'testplan:detail' testplan.project_id testplan.id %}')">查看</button>
+                        <button onclick="to('{% url 'testplan:modify' testplan.id %}')">修改</button>
+                        <button onclick="to('{% url 'testplan:delete' testplan.id %}')">删除</button>
+                        <button onclick="to('{% url 'testplan:result' testplan.id %}')">结果</button>
                     </td>
                     </tr>
                 {% endfor %}
@@ -102,12 +113,14 @@
         </table>
     <div class="pagination">
         {% if testplan_list.has_previous %}
-            <button class="page_btn"><a href="./{{testplan_list.previous_page_number}}">上一页</a></button>
+            <button class="page_btn" onclick="to('./{{testplan_list.previous_page_number}}')">上一页</button>
         {% endif %}
         <span class="current">Page {{testplan_list.number}} of {{testplan_list.paginator.num_pages}}</span>
         {% if testplan_list.has_next %}
-            <button class="page_btn"><a href="./{{testplan_list.next_page_number}}">下一页</a></button>
+            <button class="page_btn" onclick="to('./{{testplan_list.next_page_number}}')">下一页</button>
         {% endif %}
+        <input id="pg" type="text" style="width: 1.5em;">
+        <button id="go">GO</button>
     </div>
     {% endif %}
 </div>

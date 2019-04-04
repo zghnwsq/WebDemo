@@ -1,0 +1,63 @@
+ Thu, 04 Apr 2019 16:25:36 - INFO: =========Case Start, Scene:1=========
+ Thu, 04 Apr 2019 16:25:36 - INFO: Step: http_set, , , 
+ Thu, 04 Apr 2019 16:25:36 - INFO: New Http Object Set
+ Thu, 04 Apr 2019 16:25:36 - INFO: Message: 
+ Thu, 04 Apr 2019 16:25:36 - INFO: Step: http_post, http://www.testingedu.com.cn/inter/HTTP/auth, , 
+ Thu, 04 Apr 2019 16:25:37 - INFO: Sent POST request:|http://www.testingedu.com.cn/inter/HTTP/auth|---Success!
+ Thu, 04 Apr 2019 16:25:37 - INFO: Response:--->|{"status":200,"msg":"success","token":"50170242047846779ab7857589d18075"}|<---
+ Thu, 04 Apr 2019 16:25:37 - INFO: Step: http_get_res_by_json_path, $.token, token, 
+ Thu, 04 Apr 2019 16:25:37 - INFO: Try to get value: |$.token:50170242047846779ab7857589d18075|---Success!
+ Thu, 04 Apr 2019 16:25:37 - INFO: Step: http_add_headers, token, 50170242047846779ab7857589d18075, 
+ Thu, 04 Apr 2019 16:25:37 - INFO: Try to add headers: |token 50170242047846779ab7857589d18075|---Success
+ Thu, 04 Apr 2019 16:25:37 - INFO: Step: http_assert_res_by_json_path, $.status, 200, 
+ Thu, 04 Apr 2019 16:25:37 - INFO: Assert json : |$.status:200|---Success!
+ Thu, 04 Apr 2019 16:25:37 - INFO: Step: http_assert_res_contain, success, , 
+ Thu, 04 Apr 2019 16:25:37 - INFO: Assert res contain : |success|---Success!
+ Thu, 04 Apr 2019 16:25:37 - INFO: Step: http_post, http://www.testingedu.com.cn/inter/HTTP/login?username=&password=123456, , 
+ Thu, 04 Apr 2019 16:25:37 - INFO: Sent POST request:|http://www.testingedu.com.cn/inter/HTTP/login?username=&password=123456|---Success!
+ Thu, 04 Apr 2019 16:25:37 - INFO: Response:--->|{"status":402,"msg":"参数错误"}|<---
+ Thu, 04 Apr 2019 16:25:37 - INFO: Step: http_assert_res_by_json_path, $.status, 402, 
+ Thu, 04 Apr 2019 16:25:37 - INFO: Assert json : |$.status:402|---Success!
+ Thu, 04 Apr 2019 16:25:37 - INFO: Step: http_assert_res_by_json_path, $.msg, 参数错误, 
+ Thu, 04 Apr 2019 16:25:37 - INFO: Assert json : |$.msg:参数错误|---Success!
+ Thu, 04 Apr 2019 16:25:37 - INFO: =========Case End, Scene:1 PASS=========
+ Thu, 04 Apr 2019 16:25:37 - INFO: =========Case Start, Scene:2=========
+ Thu, 04 Apr 2019 16:25:37 - INFO: Step: http_set, , , 
+ Thu, 04 Apr 2019 16:25:37 - INFO: New Http Object Set
+ Thu, 04 Apr 2019 16:25:37 - INFO: Message: 
+ Thu, 04 Apr 2019 16:25:37 - INFO: Step: http_post, http://www.testingedu.com.cn/inter/HTTP/auth, , 
+ Thu, 04 Apr 2019 16:25:37 - INFO: Sent POST request:|http://www.testingedu.com.cn/inter/HTTP/auth|---Success!
+ Thu, 04 Apr 2019 16:25:37 - INFO: Response:--->|{"status":200,"msg":"success","token":"4e7fe916d63849c8b868f3393bf8dd65"}|<---
+ Thu, 04 Apr 2019 16:25:37 - INFO: Step: http_get_res_by_json_path, $.token, token, 
+ Thu, 04 Apr 2019 16:25:37 - INFO: Try to get value: |$.token:4e7fe916d63849c8b868f3393bf8dd65|---Success!
+ Thu, 04 Apr 2019 16:25:37 - INFO: Step: http_add_headers, token, 4e7fe916d63849c8b868f3393bf8dd65, 
+ Thu, 04 Apr 2019 16:25:37 - INFO: Try to add headers: |token 4e7fe916d63849c8b868f3393bf8dd65|---Success
+ Thu, 04 Apr 2019 16:25:37 - INFO: Step: http_assert_res_by_json_path, $.status, 200, 
+ Thu, 04 Apr 2019 16:25:37 - INFO: Assert json : |$.status:200|---Success!
+ Thu, 04 Apr 2019 16:25:37 - INFO: Step: http_assert_res_contain, success, , 
+ Thu, 04 Apr 2019 16:25:37 - INFO: Assert res contain : |success|---Success!
+ Thu, 04 Apr 2019 16:25:37 - INFO: Step: http_post, http://www.testingedu.com.cn/inter/HTTP/login?username=ted55555&password=123456, , 
+ Thu, 04 Apr 2019 16:25:37 - INFO: Sent POST request:|http://www.testingedu.com.cn/inter/HTTP/login?username=ted55555&password=123456|---Success!
+ Thu, 04 Apr 2019 16:25:37 - INFO: Response:--->|{"status":401,"msg":"用户名密码错误"}|<---
+ Thu, 04 Apr 2019 16:25:37 - INFO: Step: http_assert_res_by_json_path, $.status, 401, 
+ Thu, 04 Apr 2019 16:25:37 - INFO: Assert json : |$.status:401|---Success!
+ Thu, 04 Apr 2019 16:25:37 - INFO: Step: http_assert_res_by_json_path, $.msg, 用户名密码错误, 
+ Thu, 04 Apr 2019 16:25:37 - INFO: Assert json : |$.msg:用户名密码错误|---Success!
+ Thu, 04 Apr 2019 16:25:37 - INFO: =========Case End, Scene:2 PASS=========
+ Thu, 04 Apr 2019 16:25:41 - ERROR: Internal Server Error: /testplan/3/run
+Traceback (most recent call last):
+  File "C:\Users\Administrator\PycharmProjects\WebDemo\venv\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "C:\Users\Administrator\PycharmProjects\WebDemo\venv\lib\site-packages\django\core\handlers\base.py", line 126, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "C:\Users\Administrator\PycharmProjects\WebDemo\venv\lib\site-packages\django\core\handlers\base.py", line 124, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\Administrator\PycharmProjects\WebDemo\venv\lib\site-packages\django\contrib\auth\decorators.py", line 21, in _wrapped_view
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\Administrator\PycharmProjects\WebDemo\testplan\views.py", line 324, in run
+    case_path = os.path.join(c_base, case.path)
+  File "C:\Users\Administrator\PycharmProjects\WebDemo\venv\lib\ntpath.py", line 115, in join
+    genericpath._check_arg_types('join', path, *paths)
+  File "C:\Users\Administrator\PycharmProjects\WebDemo\venv\lib\genericpath.py", line 149, in _check_arg_types
+    (funcname, s.__class__.__name__)) from None
+TypeError: join() argument must be str or bytes, not 'NoneType'

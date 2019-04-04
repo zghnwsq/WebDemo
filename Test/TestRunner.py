@@ -13,7 +13,7 @@ from TestCore.Main import MainThread
 
 thd = MainThread('./log/test1.txt',
                  './testcase/Case.xlsx',
-                 'Sheet2',
+                 'sheet1',
                  ds_path='./testcase/Case.xlsx',
                  ds_sheet='data',
                  rg='1-2')
