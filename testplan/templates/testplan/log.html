@@ -8,8 +8,9 @@
         float: right;
     }
     #log {
+        height: 960px;
         margin: 20px;
-        overflow-y:scroll;
+        overflow-y:auto;
     }
 </style>
 <script type="text/javascript">
@@ -17,11 +18,6 @@
         $("#message").slideUp(5000);
         $("#error").slideUp(5000);
 
-        $("#go").click(function(){
-            var pg = $("#pg").val();
-            var go = './' + pg
-            window.location.assign(go)
-        });
     });
     function to(url){
         window.location.assign(url)
@@ -34,7 +30,7 @@
 {% if error %}<div id="error"><p style="padding-left: 40%;"><strong>{{ error }}</strong></p></div>{% endif%}
 <div class="log_form">
     <h3 class="log_text" style="display: inline-block">日 志</h3>
-    <div class="btn1" id="back" style="position: relative; left:90%; margin: 10px">
+    <div class="btn1" id="back" style="position: relative; left:90%; margin: 5px">
         {% if testplan %}
         <button onclick="to('{% url 'testplan:result_list' testplan.id 1 %}')">返回</button>
         {% else %}

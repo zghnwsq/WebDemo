@@ -36,5 +36,5 @@ class LoginView(LoginView):
             else:
                 return HttpResponseRedirect(reverse('projects:index', args=[1]))
         else:
-            return render(request, 'login/login.html', {'error_message': "Premission Denined !", })
+            return render(request, 'login/login.html', {'error_message': "Permission Denied !", })
 

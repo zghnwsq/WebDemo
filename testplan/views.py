@@ -20,6 +20,7 @@ from django.urls import reverse
 from .runner import runcase
 # Create your views here.
 
+
 class IndexView(LoginRequiredMixin, generic.ListView):
     template_name = 'testplan/testplan.html'
     context_object_name = 'project_list'

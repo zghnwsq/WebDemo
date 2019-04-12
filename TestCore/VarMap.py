@@ -13,8 +13,11 @@ class VarMap:
         :param value: 变量值
         :return:
         """
-        k = key.replace('${', '').replace('}', '')
-        self.vars[k] = value
+        if key=='':
+            raise Exception('Empty var name!')
+        else:
+            k = key.replace('${', '').replace('}', '')
+            self.vars[k] = value
 
     def remove_var(self, key):
         """
