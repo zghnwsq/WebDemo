@@ -6,6 +6,8 @@ from django.contrib.auth import authenticate,login
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.contrib.auth.models import Group
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth import logout
 from login.models import Menu, RoleMenu
 
 
@@ -37,4 +39,10 @@ class LoginView(LoginView):
                 return HttpResponseRedirect(reverse('projects:index', args=[1]))
         else:
             return render(request, 'login/login.html', {'error_message': "Permission Denied !", })
+
+
+@login_required
+def logout_view(request):
+    logout(request)
+    return HttpResponseRedirect(reverse('login:login'))
 
