@@ -5,6 +5,7 @@ from TestCore.Runner import Runner
 from TestCore.Log import Log
 from TestCore.TestCase import TestCase
 
+
 class MainThread(threading.Thread):
 
     def __init__(self, log_path, case_path, case_sheet, ds_path=None, ds_sheet=None, rg=None):

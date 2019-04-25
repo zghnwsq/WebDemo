@@ -22,6 +22,48 @@ class WebKeywords:
         self.ele = None
         self.wait = None
 
+    # @staticmethod
+    # def is_string(item):
+    #     return isinstance(item, str)
+    #
+    # def _handle_variables_in_expression(self, expression, namespace):
+    #     expr = expression
+    #     beg = 0
+    #     end = 0
+    #     while expr.find('{', beg) != -1:
+    #         beg = expr.find('{', beg) + 1
+    #         end = expr.find('}', end + 1)
+    #         varname = expr[beg: end]
+    #         val = self.var_map[varname]
+    #         namespace[varname] = val
+    #     return namespace
+    #
+    # def web_eval(self, params):
+    #     try:
+    #         expression = params[0].strip()
+    #         modules = params[1].strip()
+    #         var_name = params[2].strip()
+    #         namespace = {}
+    #         if self.is_string(expression) and '${' in expression:
+    #             namespace = self._handle_variables_in_expression(expression, namespace)
+    #             expression = expression.replace('${', '').replace('}', '')
+    #         if modules:
+    #             modules = modules.replace(' ', '').split(',') if modules else []
+    #             namespace.update((m, __import__(m)) for m in modules if m)
+    #         if not self.is_string(expression):
+    #             raise TypeError("Expression must be string")
+    #         if not expression:
+    #             raise ValueError("Expression cannot be empty.")
+    #         val =  eval(expression, namespace)
+    #         self.var_map.set_var(var_name, val)
+    #         self.log.write('info', 'Evaluate of : | %s = %s |---Success!' % (val, expression))
+    #         return True
+    #     except Exception as e:
+    #         self.log.write('error', 'Evaluate of : | %s |---Fail!' % expression)
+    #         self.log.write('error', e.__str__())
+    #         self.take_screenshot()
+    #         return False
+
     def take_screenshot(self):
         try:
             stamp = time.mktime(time.localtime()).replace('.0', '')
