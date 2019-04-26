@@ -116,14 +116,14 @@ class Runner:
             for_flag = 0
             for_steps = []
             for_run_step_flag = 0
-            p1, p2, p3 = ''
+            p1, p2, p3 = '', '', ''
             for i in range(0, len(self.tc), 1):
                 # 从for循环的第二轮开始到结束
                 if for_flag and for_run_step_flag:
                     v = list(for_range.keys())
                     for_rg = for_range[v[0]]
                     for j in range(1, len(for_rg)):
-                        k.var_map.set_var(v[0] ,for_rg[j])
+                        k.var_map.set_var(v[0], for_rg[j])
                         for step in for_steps:
                             action = step[0]
                             p1 = step[1]
