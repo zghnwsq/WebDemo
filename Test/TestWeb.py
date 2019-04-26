@@ -11,6 +11,10 @@ import time
 
 var_map = {'a': [2,3,4,5], 'b': [2,2]}
 
+v = list(var_map.keys())
+print(v[0])
+
+
 def _handle_variables_in_expression(expression, namespace):
     expr = expression
     beg = 0
