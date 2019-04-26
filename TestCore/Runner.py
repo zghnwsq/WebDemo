@@ -127,8 +127,11 @@ class Runner:
                         for step in for_steps:
                             action = step[0]
                             p1 = step[1]
+                            p1 = var_map.get_var(p1)
                             p2 = step[2]
+                            p2 = var_map.get_var(p2)
                             p3 = step[3]
+                            p3 = var_map.get_var(p3)
                             params = [p1, p2, p3]
                             if 'exit' not in action:
                                 self.log.write('info', 'Step: %s, %s, %s, %s' % (action, p1, p2, p3))
@@ -185,11 +188,14 @@ class Runner:
                 elif 'do' in action and (if_flag or for_flag):
                     action = self.tc[i][3].strip()
                     p1 = self.tc[i][4].strip()
+                    # p1 = k._handle_variables_in_param(p1, k.var_map)
                     p1 = var_map.get_var(p1)
                     temp = self.tc[i][5].strip().split(',')
-                    p2 = var_map.get_var(temp[0])
-                    if len(temp)>0:
-                        p3 = var_map.get_var(temp[1])
+                    # p2 = k._handle_variables_in_param(temp[0], k.var_map)
+                    p2 = var_map.get_var(p2)
+                    if len(temp) > 0:
+                        # p3 = k._handle_variables_in_param(temp[1], k.var_map)
+                        p3 = var_map.get_var(p3)
                     if for_flag:
                         for_steps.append([action, p1 or '', p2 or '', p3 or ''])
                         next_step_action = self.tc[i+1][2].strip()
@@ -197,6 +203,7 @@ class Runner:
                             for_run_step_flag = 1
                 elif 'exit' in action:
                     p1 = self.tc[i][3].strip()
+                    p1 = var_map.get_var(p1)
                     try:
                         condition = k.evaluate(p1)
                     except Exception as e:

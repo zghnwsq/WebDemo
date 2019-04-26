@@ -3,6 +3,7 @@
 from TestCore.InterfaceKeywords import InterfaceKeywords
 from TestCore.WebKeywords import WebKeywords
 
+
 class Keyword:
 
     def __init__(self, log, var_map):
@@ -91,4 +92,18 @@ class Keyword:
             self.take_screenshot()
             return False
 
+    @staticmethod
+    def _handle_variables_in_param(param, var_map):
+        expr = param
+        beg = 0
+        end = 0
+        if '{' in param:
+            while expr.find('{', beg) != -1:
+                beg = expr.find('{', beg) + 1
+                end = expr.find('}', end + 1)
+                varname = expr[beg: end]
+                val = var_map[varname]
+                expr.replace(varname, val)
+            expr = expr.replace('${', '').replace('}', '')
+        return expr
 
