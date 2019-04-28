@@ -112,7 +112,7 @@ class InterfaceKeywords:
         """
         try:
             if params[0].strip() != '':
-                self.http.set_body(params[0])
+                self.http.set_body(self.var_map.get_var(params[0]))
             self.log.write('info', 'Try to set body: |' + params[0] + '|---Success!')
             return True
         except Exception as e:
@@ -128,7 +128,7 @@ class InterfaceKeywords:
         """
         try:
             if params[0].strip() != '':
-                self.http.set_body(params[0])
+                self.http.set_body(self.var_map.get_var(params[0]))
             self.log.write('info', 'Try to set body: |' + params[0] + '|---Success!')
             return True
         except Exception as e:
@@ -178,7 +178,7 @@ class InterfaceKeywords:
         try:
             val = self.http.get_res_by_json_path(params[0])[0]
             value = str(val)
-            if value.find(params[1].strip()) != -1:
+            if value.find(self.var_map.get_var(params[1].strip())) != -1:
                 self.log.write('info', 'Assert json : |' + params[0] + ':' + value + '|---Success!')
                 return True
             else:
@@ -199,7 +199,7 @@ class InterfaceKeywords:
         """
         try:
             res = self.http.get_response_text()
-            if res.find(params[0].strip()) != -1:
+            if res.find(self.var_map.get_var(params[0].strip())) != -1:
                 self.log.write('info', 'Assert res contain : |' + params[0] + '|---Success!')
                 return True
             else:

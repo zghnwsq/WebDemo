@@ -16,10 +16,11 @@ class MainThread(threading.Thread):
         self.ds_path = ds_path
         self.ds_sheet = ds_sheet
         self.rg = rg
+        self.res = None
 
     def run(self):
         if self.ds_path or self.ds_sheet or self.rg:
-            self.res = self.runner.run(ds=self.ds_path, ds_sheet_name=self.ds_sheet, rg=self.rg)
+            self.res = self.runner.run2(ds=self.ds_path, ds_sheet_name=self.ds_sheet, rg=self.rg)
         else:
             self.res = self.runner.run()
 

@@ -12,11 +12,11 @@ from TestCore.Main import MainThread
 # # res = r.run(ds='./testcase/Case.xlsx', ds_sheet_name='data', rg='1-2')
 
 thd = MainThread('./log/test1.txt',
-                 './testcase/Case.xlsx',
+                 './testcase/Case3.xlsx',
                  'sheet1',
-                 ds_path='./testcase/Case.xlsx',
+                 ds_path='./testcase/Case3.xlsx',
                  ds_sheet='data',
-                 rg='1-2')
+                 rg='1')
 thd.start()
 thd.join()
 res = thd.get_res()

@@ -107,7 +107,7 @@ class WebKeywords:
     def web_ie(self, params):
         try:
             # ip = self.var_map.get_var('ip')
-            ip = params[0].strip()
+            ip = self.var_map.get_var(params[0].strip())
             host = 'http://' + ip + ':4444/wd/hub'
             driver = self.var_map.get_var('driver')
             if not driver:
@@ -137,7 +137,7 @@ class WebKeywords:
     def web_chrome(self, params):
         try:
             # ip = self.var_map.get_var('ip')
-            ip = params[0].strip()
+            ip = self.var_map.get_var(params[0].strip())
             host = 'http://' + ip + ':4444/wd/hub'
             driver = self.var_map.get_var('driver')
             if not driver:
@@ -166,7 +166,7 @@ class WebKeywords:
 
     def web_set_driver(self, params):
         try:
-            driver = params[0].strip()
+            driver = self.var_map.get_var(params[0].strip())
             if driver:
                 self.var_map.set_var('driver', driver)
                 self.log.write('info', 'Set driver path: ' + params[0])
@@ -180,7 +180,7 @@ class WebKeywords:
 
     def web_get(self, params):
         try:
-            url = params[0].strip()
+            url = self.var_map.get_var(params[0].strip())
             if url:
                 self.dr.get(url)
                 self.log.write('info', 'Try to open : |' + url + '|---Success!')
@@ -201,7 +201,7 @@ class WebKeywords:
 
     def web_sleep(self, params):
         try:
-            seconds = int(params[0].strip())
+            seconds = int(self.var_map.get_var(params[0].strip()))
             if seconds:
                 time.sleep(seconds)
                 self.log.write('info', 'Try to sleep : |' + seconds + '|---Success!')
@@ -222,8 +222,8 @@ class WebKeywords:
 
     def web_wait(self, params):
         try:
-            locator = params[0].strip()
-            seconds = int(params[1].strip())
+            locator = self.var_map.get_var(params[0].strip())
+            seconds = int(self.var_map.get_var(params[1].strip()))
             element = self.ele.get(locator)
             self.wait = WebDriverWait(self.dr, seconds or 30)
             self.wait.until(element.is_displayed())
@@ -242,7 +242,7 @@ class WebKeywords:
 
     def web_click(self, params):
         try:
-            locator = params[0].strip()
+            locator = self.var_map.get_var(params[0].strip())
             element = self.ele.get(locator)
             element.click()
             self.log.write('info', 'Try to click : | %s |---Success!' % locator)
@@ -260,9 +260,9 @@ class WebKeywords:
 
     def web_select_by_index(self, params):
         try:
-            locator = params[0].strip()
+            locator = self.var_map.get_var(params[0].strip())
             element = self.ele.get(locator)
-            index = int(params[1].strip())
+            index = int(self.var_map.get_var(params[1].strip()))
             Select(element).select_by_index(index)
             self.log.write('info', 'Try to select by index: | %s of %s |---Success!' % (params[1], locator))
             return True
@@ -279,9 +279,9 @@ class WebKeywords:
 
     def web_select_by_text(self, params):
         try:
-            locator = params[0].strip()
+            locator = self.var_map.get_var(params[0].strip())
             element = self.ele.get(locator)
-            text = params[1].strip()
+            text = self.var_map.get_var(params[1].strip())
             Select(element).select_by_visible_text(text)
             self.log.write('info', 'Try to select by text: | %s of %s |---Success!' % (params[1], locator))
             return True
@@ -298,9 +298,9 @@ class WebKeywords:
 
     def web_select_by_value(self, params):
         try:
-            locator = params[0].strip()
+            locator = self.var_map.get_var(params[0].strip())
             element = self.ele.get(locator)
-            value = params[1].strip()
+            value = self.var_map.get_var(params[1].strip())
             Select(element).deselect_by_value(value)
             self.log.write('info', 'Try to select by value : | %s of %s |---Success!' % (params[1], locator))
             return True
@@ -317,9 +317,9 @@ class WebKeywords:
 
     def web_input(self, params):
         try:
-            locator = params[0].strip()
+            locator = self.var_map.get_var(params[0].strip())
             element = self.ele.get(locator)
-            text = params[1].strip()
+            text = self.var_map.get_var(params[1].strip())
             element.send_keys(text)
             self.log.write('info', 'Try to input : | %s to %s |---Success!' % (params[1], locator))
             return True
@@ -336,9 +336,9 @@ class WebKeywords:
 
     def web_get_text(self, params):
         try:
-            locator = params[0].strip()
+            locator = self.var_map.get_var(params[0].strip())
             text = self.ele.get(locator).text
-            var = params[1].strip()
+            var = self.var_map.get_var(params[1].strip())
             self.var_map.set_var(var, text)
             self.log.write('info', 'Get text of : | %s : %s |---Success!' % (locator, text))
             return True
@@ -355,10 +355,10 @@ class WebKeywords:
 
     def web_get_attr(self, params):
         try:
-            locator = params[0].strip()
-            attribute = params[1].strip()
+            locator = self.var_map.get_var(params[0].strip())
+            attribute = self.var_map.get_var(params[1].strip())
             attr = self.ele.get(locator).get_attribute(attribute)
-            var = params[2].strip()
+            var = self.var_map.get_var(params[2].strip())
             self.var_map.set_var(var, attr)
             self.log.write('info', 'Get %s of : | %s : %s |---Success!' % (attribute, locator, attr))
             return True
