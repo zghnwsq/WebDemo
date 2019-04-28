@@ -203,22 +203,26 @@ class Runner:
                 if not r:
                     self.log.write('error', 'xxxxxxxxxStep Fail And Stop Running This Case!xxxxxxxxx')
                     break
-                if for_flag:
+                if for_flag or if_flag:
                     # 还有后续步骤
                     if len(self.tc) > i + 1:
                         next_step_action = self.tc[i + 1][2].strip()
-                        # 后一步不是do 也不是exit则循环体到此结束，开始第二次循环
+                        # 后一步不是do 也不是exit则if/for到此结束，开始执行循环体
                         if 'do' not in next_step_action and 'exit' not in next_step_action:
-                            result = self.for_loop(for_range, for_steps, k, result)
-                            for_range = []
-                            for_flag = 0
-                            for_steps = []
+                            if for_flag:
+                                result = self.for_loop(for_range, for_steps, k, result)
+                                for_range = []
+                                for_flag = 0
+                                for_steps = []
+                            else:
+                                if_flag = 0
                     # 没有后续步骤，则执行循环体
                     else:
                         result = self.for_loop(for_range, for_steps, k, result)
                         for_range = []
                         for_flag = 0
                         for_steps = []
+                        if_flag = 0
             end_time = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
             scene_res[2] = end_time
             if result:
