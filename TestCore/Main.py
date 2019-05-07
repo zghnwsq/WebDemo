@@ -22,7 +22,7 @@ class MainThread(threading.Thread):
         if self.ds_path or self.ds_sheet or self.rg:
             self.res = self.runner.run2(ds=self.ds_path, ds_sheet_name=self.ds_sheet, rg=self.rg)
         else:
-            self.res = self.runner.run()
+            self.res = self.runner.run2()
 
     def get_res(self):
         try:
