@@ -65,6 +65,7 @@ class ModifyView(LoginRequiredMixin, generic.DetailView):
         menu = Menu.objects.filter(menu_text__in=rmenu).order_by('order')
         context['user_group'] = request.session['user_group']
         context['user_name'] = request.session['user_name']
+        context['menu'] = menu
         return context
 
     def post(self, request, pk):

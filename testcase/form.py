@@ -9,7 +9,7 @@ class ModifyForm(forms.Form):
     no = forms.CharField(max_length=20, strip=True, required=False)
     case = forms.CharField(max_length=50, strip=True, required=False)
     # project = forms.Select()
-    path = forms.FilePathField(path='', widget=widgets.FileInput, allow_folders=False, required=False)
+    path = forms.FilePathField(path='.', widget=widgets.FileInput, allow_folders=False, required=False)  # path 2019.8.6
     sheet = forms.CharField(max_length=32, required=False)
 
 
@@ -19,7 +19,7 @@ class NewForm(forms.Form):
     # project = forms.ChoiceField(widget=widgets.Select, required=True)
     # project = forms.Select()
     # path = forms.FileInput()
-    path = forms.FilePathField(path='', widget=widgets.FileInput, allow_folders=False, required=False)
+    path = forms.FilePathField(path='.', widget=widgets.FileInput, allow_folders=False, required=False)  # path 2019.8.6
     sheet = forms.CharField(max_length=32, required=False)
 
 
