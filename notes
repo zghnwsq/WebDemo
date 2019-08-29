@@ -111,8 +111,8 @@ case[Suit, TestCase, Action, P1, P2, P3, Result, Detail]
 无	无	如果不是最后一行	endRow=当前
 		如果是最后一行  	endRow=当前，存储用例
 
-
-
+# 强制覆盖本地
+git fetch --all && git reset --hard origin/master && git pull
 
 
 
