@@ -1,6 +1,7 @@
 # coding:utf8
 
 from TestCore.Http import *
+import requests
 
 url = 'https://api.caiyunapp.com/v2/aJkb6gTZrkEqnAQh/121.544379,31.221517/realtime?unit=metric:v2'
 header = {'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.75 Safari/537.36',
@@ -15,3 +16,4 @@ print(dict(http.get_response_headers())['Content-Type'])
 print(http.get_response_text())
 print(http.get_res_by_json_path('$.result.temperature'))
 
+requests.get()

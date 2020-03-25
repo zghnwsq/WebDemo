@@ -4,12 +4,12 @@ from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views import generic
-from django.views.generic.edit import FormView
-from django.contrib.auth.models import Group, User
+# from django.views.generic.edit import FormView
+# from django.contrib.auth.models import Group, User
 from login.models import Menu, RoleMenu
 from projects.models import ProjectsUser, Projects
-from .models import TestCase
-from datasource.models import Datasource
+# from .models import TestCase
+# from datasource.models import Datasource
 from django.http import JsonResponse
 from .models import *
 from .form import *

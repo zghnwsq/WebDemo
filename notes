@@ -1,4 +1,4 @@
-# coding:utf-8
+﻿# coding:utf-8
 # 如使用mysql,则应安装:
 pip install mysqlclient
 
@@ -113,6 +113,11 @@ case[Suit, TestCase, Action, P1, P2, P3, Result, Detail]
 
 # 强制覆盖本地
 git fetch --all && git reset --hard origin/master && git pull
+
+
+如果你已经有已知的数据库及表格。
+运行下面代码可以自动生成models模型文件
+python manage.py inspectdb > your_app_name/models.py
 
 
 

@@ -13,7 +13,6 @@ from login.models import Menu, RoleMenu
 
 class LoginView(LoginView):
 
-
     def get(self, request):
         redirect = request.GET.get('next', '')
         return render(request, 'login/login.html', {'next': redirect})
