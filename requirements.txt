@@ -1,5 +1,5 @@
 chardet==3.0.4
-Django==3.0.2
+Django==3.0.14
 idna==2.8
 jsonpath==0.81
 lxml==4.3.2
