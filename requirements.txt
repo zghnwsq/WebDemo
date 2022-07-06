@@ -2,7 +2,7 @@ chardet==3.0.4
 Django==3.0.2
 idna==2.8
 jsonpath==0.81
-lxml==4.3.2
+lxml==4.9.1
 pytz==2018.9
 requests==2.21.0
 selenium==3.14.1
